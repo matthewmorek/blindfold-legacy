@@ -1,7 +1,7 @@
 {
   "name": "blindfold",
   "version": "0.1.0",
-  "description": "Disable retweets for all the people you follow on Twitter programmatically.",
+  "description": "Disable retweets from people you follow, all at once.",
   "main": "server.js",
   "scripts": {
     "postinstall": "grunt dist",
@@ -33,6 +33,7 @@
     "modularscale-sass": "^3.0.3",
     "morgan": "^1.8.2",
     "node-sass": "^4.1.1",
+    "normalize-scss": "^7.0.1",
     "nunjucks": "^3.0.1",
     "postcss-discard-duplicates": "^2.1.0",
     "postcss-scss": "^1.0.2",

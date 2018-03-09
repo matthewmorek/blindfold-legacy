@@ -81,6 +81,7 @@ module.exports = function (grunt) {
       sassDir: 'assets/scss',
       cssDir: 'public/css',
       includePaths: [
+        'node_modules/normalize-scss/sass',
         'node_modules/modularscale-sass/stylesheets',
         'node_modules/typi/scss',
         'node_modules/tachyons-sass'
