@@ -5,7 +5,6 @@
 const path      = require('path');
 var config      = require('config');
 var express     = require('express');
-var sitemap     = require('express-sitemap');
 if (process.env.NODE_ENV !== 'production') {
   var bs = require('browser-sync');
 }
@@ -13,9 +12,8 @@ var helmet      = require('helmet');
 var nunjucks    = require('nunjucks');
 var bodyParser  = require('body-parser');
 var sanitizer   = require('express-sanitizer');
-// var Mailgun     = require('mailgun-js');
 var logger      = require('morgan');
-var dateformat  = require('dateformat');
+// var dateformat  = require('dateformat');
 
 // Main app
 var app = express();
