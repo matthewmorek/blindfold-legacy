@@ -1,0 +1,9 @@
+$measure: (
+  tight:  24em,
+  normal: 30em,
+  loose:  34em
+);
+
+.measure        { max-width: map-get($measure, "normal"); }
+.measure-tight  { max-width: map-get($measure, "tight"); }
+.measure-loose  { max-width: map-get($measure, "loose"); }

@@ -1,0 +1,59 @@
+$breakpoints: (
+  sm: $sm,
+  md: $md,
+  lg: $lg
+);
+
+$typi: (
+  base: (
+    null: (16px, 1.6),
+    sm: (16px, 1.6),
+    md: (16px, 1.6),
+    lg: (18px, 1.6),
+  ),
+  h1: (
+    null: (3, 1.1),
+    sm: 3,
+    md: 4,
+    lg: 4,
+  ),
+  h2: (
+    null: (2, 1.2),
+    sm: 2,
+    md: 3,
+    lg: 3,
+  ),
+  h3: (
+    null: (1, 1.166),
+    sm: 1,
+    md: 2,
+    lg: 2,
+  ),
+  h4: (
+    null: (0, 1.2),
+    sm: 0,
+    md: 1,
+    lg: 1,
+  ),
+  h5: (
+    null: (-1, 1.6),
+    sm: -1,
+    md: -1,
+    lg: -1,
+  ),
+  h6: (
+    null: (0, 1.333),
+    sm: 0,
+    md: 0,
+    lg: 0,
+  )
+);
+
+$typi-ms: (
+  null: 1.25,
+  sm: 1.25,
+  md: 1.278,
+  lg: 1.278,
+);
+
+@include typi-init;

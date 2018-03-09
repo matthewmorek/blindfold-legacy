@@ -1,0 +1,9 @@
+{% set page_title = page.title or meta.subtitle or '' %}
+{% set page_desc = page_description or meta.description or '' %}
+
+{% extends "layouts/main.njk" %}
+
+{% block body %}
+  <h1>{{ meta.title }}</h1>
+  <p>{{ meta.subtitle }}</p>
+{% endblock %}

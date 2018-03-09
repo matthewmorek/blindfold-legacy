@@ -1,0 +1,56 @@
+// Variables
+// Project: MADBIT Co. Homepage
+// 2016 © MADBIT Co.
+
+$font-size: 1rem;
+$font-size-small: 0.875rem;
+$font-normal: 400;
+$font-bold: 600;
+$font-family: "Muli", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$baseline: 1.500;
+
+$white:                 #fff;
+$black:                 #000;
+$grey-darkest:          #1c1c1c;
+$grey-darker:           #2c2e2f;
+$grey-dark:             #4a4a4a;
+$grey-base:             #8a8a8a;
+$grey-light:            #bababa;
+$grey-lighter:          #dfdfdf;
+$grey-lightest:         #f4f4f4;
+
+$brand-primary:         #f2c57c;
+$brand-primary-lt:      #fae9cf;
+$brand-secondary:       #8499b1;
+$brand-pale-grey:       #f3f5f7;
+$brand-onyx:            #333745;
+$brand-black-olive:     #3b3d43;
+
+$body-bg:               #fff;
+$text-color:            #333745;
+
+$spacing-unit: 0.25rem;
+
+$sm: 32em;
+$md: 48em;
+$lg: 64em;
+$xl: 72em;
+
+$project-container: 60em;
+
+$breakpoint-not-small: "screen and (min-width: $sm)" !default;
+$breakpoint-medium: "screen and (min-width: $md)" !default;
+$breakpoint-large: "screen and (min-width: $lg)" !default;
+$breakpoint-xlarge: "screen and (min-width: $xl)" !default;
+
+@mixin mq($viewport) {
+  @media screen and (min-width: $viewport) {
+    @content;
+  }
+}
+
+@mixin mq-custom($mq...) {
+  @media screen and ($mq) {
+    @content;
+  }
+}

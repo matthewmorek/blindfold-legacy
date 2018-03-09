@@ -1,0 +1,42 @@
+{% set page_title = page_title + ' — ' + meta.title %}
+
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta http-equiv="cleartype" content="on">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="language" content="{{ meta.locale }}">
+<meta name="author" content="{{ meta.author }}">
+<meta name="description" content="{{ page_desc }}">
+<meta name="url" content="{{ page_url }}">
+<meta name="robots" content="index,follow,noodp">
+
+<!-- OpenGraph -->
+<meta property="og:url" content="{{ page_url }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:description" content="{{ page_desc }}">
+{% if page_image %}<meta property="og:image" content="{{ base_url + page_image }}">{% endif %}
+<meta property="og:site_name" content="{{ page_title }}">
+<meta property="og:locale" content="{{ meta.locale }}">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@{{ meta.twitter.creator }}">
+<meta name="twitter:url" content="{{ page_url }}">
+<meta name="twitter:title" content="{{ page_title }}">
+<meta name="twitter:description" content="{{ page_description }}">
+{% if page_image %}<meta name="twitter:image" content="{{ base_url + page_image }}">{% endif %}
+
+<!-- Schema.org -->
+<meta itemprop="name" content="{{ page_title }}">
+<meta itemprop="description" content="{{ page_description }}">
+{% if page_image %}<meta itemprop="image" content="{{ base_url + page_image }}">{% endif %}
+
+<title>{{ page_title }}</title>
+{# {% if url_canonical %}<link rel="canonical" href="{{ url_canonical }}">{% endif %} #}
+
+<!-- Touch Icons -->
+<link rel="apple-touch-icon" href="{{ base_url }}/images/favicon/apple-touch-icon-precomposed.png">
+<link rel="apple-touch-icon-precomposed" href="{{ base_url }}/images/favicon/apple-touch-icon-precomposed.png">
+<link rel="icon" type="image/png" href="{{ base_url }}/images/favicon/favicon-16.png" sizes="16x16" />
+<link rel="icon" type="image/png" href="{{ base_url }}/images/favicon/favicon-196.png" sizes="196x196" />

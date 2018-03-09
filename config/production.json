@@ -1,0 +1,9 @@
+{
+  "app": {
+    "server": {
+      "port": 8080,
+      "cache": true,
+      "watch": false
+    }
+  }
+}

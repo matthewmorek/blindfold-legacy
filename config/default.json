@@ -1,0 +1,23 @@
+{
+  "app": {
+    "server": {
+      "port": 3000,
+      "cache": false,
+      "watch": true,
+      "url": "blindfold.madbit.co"
+    },
+    "meta": {
+      "language": "en",
+      "locale": "en_GB",
+      "author": "Matthew Morek",
+      "title": "Blindfold",
+      "subtitle": "Disable retweets from people you follow on Twitter programmatically",
+      "description": "",
+      "og_type": "website",
+      "twitter": {
+        "card": "summary_large_image",
+        "creator": "matthewmorek"
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "blindfold",
+  "version": "0.1.0",
+  "description": "Disable retweets for all the people you follow on Twitter programmatically.",
+  "main": "server.js",
+  "scripts": {
+    "postinstall": "grunt dist",
+    "clean": "grunt clean",
+    "build": "grunt build",
+    "dist": "grunt dist",
+    "watch": "grunt watch",
+    "start": "node server.js"
+  },
+  "author": "Matthew Morek (matthewmorek@me.com)",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "autoprefixer": "^8.1.0",
+    "body-parser": "^1.17.2",
+    "config": "^1.26.1",
+    "cssnano": "^3.10.0",
+    "dateformat": "^3.0.2",
+    "express": "^4.14.1",
+    "express-sanitizer": "^1.0.2",
+    "express-sitemap": "^1.7.0",
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-uglify": "^3.1.0",
+    "grunt-postcss": "^0.9.0",
+    "grunt-sass": "^2.0.0",
+    "helmet": "^3.6.1",
+    "modularscale-sass": "^3.0.3",
+    "morgan": "^1.8.2",
+    "node-sass": "^4.1.1",
+    "nunjucks": "^3.0.1",
+    "postcss-discard-duplicates": "^2.1.0",
+    "postcss-scss": "^1.0.2",
+    "tachyons-sass": "^4.8.1",
+    "twit": "^2.2.9",
+    "typi": "^3.1.2"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "grunt-concurrent": "^2.3.1",
+    "grunt-contrib-watch": "~1.0.0",
+    "grunt-eslint": "~20.1.0",
+    "grunt-nodemon": "^0.4.2",
+    "semistandard": "*",
+    "time-grunt": "~1.4.0"
+  }
+}

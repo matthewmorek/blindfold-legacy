@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="{{ meta.language }}">
+  {% include "partials/head.njk" %}
+
+  <body id="body">
+    {% include "partials/header.njk" %}
+
+    {% block body %}
+    <main class="bg-white col-grey-text w-100">
+      <div class="ph4 ph0-l pv4 pv5-l mc mw6 mw7-l">
+        <h1 class="lh-title mv2">Page not found</h1>
+        <p>We're sorry, but the page you requested cannot be found</p>
+      </div>
+    </main>
+    {% endblock %}
+
+    {% include "../partials/footer.njk" %}
+
+    {% block scripts %}{% endblock %}
+
+  </body>
+
+</html>

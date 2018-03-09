@@ -1,0 +1,21 @@
+.btn {
+  display: inline-block;
+  padding: 1.125rem 1rem 1rem;
+  transition: 0.15s border-color ease-in, 0.15s background-color ease-in;
+  border: 1px solid desaturate(darken($brand-primary, 10%), 20%);
+  border-radius: 42px;
+  background-color: $brand-primary;
+  color: $text-color;
+  font-family: $font-family;
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.333;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: inset 0 1px 1px 0 rgba($white, 0.3), 0 1px 3px rgba($black, 0.2);
+
+  &:hover {
+    border-color: desaturate(darken($brand-primary, 20%), 25%);
+    background-color: lighten($brand-primary, 5%);
+  }
+}

@@ -1,0 +1,93 @@
+* { box-sizing: border-box; }
+
+html {
+  height: 100%;
+}
+
+html,
+body {
+  color: $text-color;
+  font-family: $font-family;
+  font-size: 400;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+
+  font-feature-settings: "liga", "clig";
+  font-variant-ligatures: common-ligatures;
+}
+
+h1, .h1 {
+  @include typi("h1");
+  margin-top: 0.666em;
+  margin-bottom: 0.666em;
+  letter-spacing: -1px;
+  font-weight: 700;
+}
+
+h2, .h2 {
+  @include typi("h2");
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+  letter-spacing: -1px;
+  font-weight: 700;
+}
+
+h3, .h3 {
+  @include typi("h3");
+  margin-top: 1em;
+  margin-bottom: 1em;
+  letter-spacing: -0.5px;
+  font-weight: 700;
+}
+
+h4, .h4 {
+  @include typi("h4");
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  font-weight: 700;
+}
+
+p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+
+  & + p {
+    margin-top: 1em;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.container {
+  max-width: 64em;
+}
+
+.container-narrow {
+  max-width: 40em;
+}
+
+.container-alt {
+  background-color: $brand-pale-grey;
+}
+
+.measure {
+  max-width: 30em;
+}
+
+.measure-wide {
+  max-width: 34em;
+}
+
+.measure-narrow {
+  max-width: 24em;
+}
+
+.footer {
+  border-top: 1px solid $grey-lightest;
+}
+
+small {
+  color: $grey-dark;
+}

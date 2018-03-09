@@ -1,0 +1,20 @@
+// -----------------------------------------------------------------------------
+// Module: Mixins
+// -----------------------------------------------------------------------------
+
+@mixin mq($viewport) {
+  @media screen and (min-width: $viewport) {
+    @content;
+  }
+}
+
+@mixin mq-custom($mq...) {
+  @media screen and ($mq) {
+    @content;
+  }
+}
+
+// Transition
+@mixin transition($properties...) {
+  transition: $properties;
+}
