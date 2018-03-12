@@ -11,7 +11,6 @@ body {
   font-size: 400;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
-
   font-feature-settings: "liga", "clig";
   font-variant-ligatures: common-ligatures;
 }
@@ -54,6 +53,14 @@ p {
   & + p {
     margin-top: 1em;
   }
+}
+
+pre {
+  font-family: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,Courier,monospace;
+  font-size: 0.875rem;
+  word-wrap: normal;
+  white-space: pre;
+  overflow-x: auto;
 }
 
 .hidden {
