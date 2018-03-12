@@ -1,0 +1,4 @@
+node_modules/**
+assets/js/**
+test/**
+gruntfile.js

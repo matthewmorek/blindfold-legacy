@@ -125,19 +125,18 @@ module.exports = function (grunt) {
 
     grunt.config('eslint', {
       options: {
-        ignorePattern: ['assets/js/lib/**/*.js'],
-        configFile: 'config/eslint.json'
+        ignorePattern: ['assets/js/lib/**/*.js']
       },
       target: ['assets/js/**/*.js']
     });
 
     grunt.config('nodemon', {
       dev: {
-        script: 'server.js',
+        script: './app/index.js',
         options: {
           ignore: ['node_modules/**'],
-          ext: 'js,json',
-          watch: ['config'],
+          ext: 'js',
+          watch: ['./app'],
         }
       }
     });

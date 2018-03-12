@@ -6,10 +6,28 @@
 {% block body %}
 <main class="ph3 ph4-m mw6 ml-auto mr-auto">
   <p class="mt0">Disable retweets from the people you follow, <strong>all at once</strong>. Why?</p>
-  <p>Because not seeing retweets in your feed will help your mind <strong>stay free of the negativity</strong> and bullshit that it is.</p>
-  <p class="mv4">
-    <a href="" class="btn btn-primary db">Sign in with Twitter</a>
-  </p>
-  <p class="lh-title tc"><small>You will have to confirm your intention after authorising the app with Twitter.</small></p>
+  
+  {% if not user %}
+    <p>Because not seeing retweets in your feed will help your mind <strong>stay free of the negativity</strong> and bullshit that it is.</p>
+    <p class="mv4">
+      <a href="{{ base_url }}/auth" class="btn btn-primary db">Sign in with Twitter</a>
+    </p>
+    <p class="lh-title tc"><small>You will have to confirm your intention after authorising the app with Twitter.</small></p>
+  {% else %}
+    <div class="flex justify center">
+      <div class="w-25">
+        <img src="{{ user.photos[0].value }}" alt="{{ user.displayName }}" class="w3 v-mid">
+      </div>
+      <div class="w-75">
+        <p class="mv1 lh-title">You are signed in as:</p>
+        <p class="mv1 lh-title b">{{ user.displayName }}</p>
+      </div>
+    </div>
+
+    <p class="mv4">
+      <a href="{{ base_url }}/wrap" class="btn btn-primary db ttu">Restore my sanity</a>
+    </p>
+    
+  {% endif %}
 </main>
 {% endblock %}
