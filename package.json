@@ -4,12 +4,11 @@
   "description": "Disable retweets from people you follow, all at once.",
   "main": "server.js",
   "scripts": {
-    "postinstall": "grunt dist",
     "clean": "grunt clean",
     "build": "grunt build",
     "dist": "grunt dist",
     "watch": "grunt watch",
-    "start": "node server.js"
+    "start": "node ./app/index.js"
   },
   "author": "Matthew Morek (matthewmorek@me.com)",
   "license": "MIT",
@@ -17,11 +16,14 @@
   "dependencies": {
     "autoprefixer": "^8.1.0",
     "body-parser": "^1.17.2",
-    "config": "^1.26.1",
+    "connect-ensure-login": "^0.1.1",
+    "cookie-parser": "^1.4.3",
     "cssnano": "^3.10.0",
     "dateformat": "^3.0.2",
+    "dotenv": "^5.0.1",
     "express": "^4.14.1",
     "express-sanitizer": "^1.0.2",
+    "express-session": "^1.15.6",
     "express-sitemap": "^1.7.0",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
@@ -35,10 +37,12 @@
     "node-sass": "^4.1.1",
     "normalize-scss": "^7.0.1",
     "nunjucks": "^3.0.1",
+    "passport": "^0.4.0",
+    "passport-twitter": "^1.0.4",
     "postcss-discard-duplicates": "^2.1.0",
     "postcss-scss": "^1.0.2",
     "tachyons-sass": "^4.8.1",
-    "twit": "^2.2.9",
+    "twitter": "^1.7.1",
     "typi": "^3.1.2"
   },
   "devDependencies": {
