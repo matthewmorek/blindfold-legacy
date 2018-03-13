@@ -76,6 +76,7 @@ module.exports.init = (app, config) => {
     // define basic context for the templates
     context.base_url = req.protocol + '://' + req.get('host');
     context.page_url = context.base_url + req.path;
+    context.user = req.user;
     context.meta = {
       language: 'en',
       locale: 'en_GB',
@@ -89,11 +90,7 @@ module.exports.init = (app, config) => {
         creator: 'matthewmorek'
       }
     };
-    context.user = req.user;
 
-    console.log(_templates);
-
-    // render the request
     res.render('index', context);
   });
 

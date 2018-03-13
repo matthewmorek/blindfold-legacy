@@ -28,6 +28,7 @@
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-uglify": "^3.1.0",
     "grunt-postcss": "^0.9.0",
     "grunt-sass": "^2.0.0",
@@ -43,7 +44,8 @@
     "postcss-scss": "^1.0.2",
     "tachyons-sass": "^4.8.1",
     "twitter": "^1.7.1",
-    "typi": "^3.1.2"
+    "typi": "^3.1.2",
+    "vue": "^2.5.15"
   },
   "devDependencies": {
     "browser-sync": "^2.18.13",

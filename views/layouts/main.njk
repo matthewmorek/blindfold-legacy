@@ -13,8 +13,14 @@
     {% endblock %}
 
     {% include "../partials/footer.njk" %}
+    
+    {% if user %}
+      <script src="{{ base_url }}/js/bundle.js"></script>
+      <script src="{{ base_url }}/js/vue.js"></script>
+    {% endif %}
 
-    {% block scripts %}{% endblock %}
+    {% block scripts %}
+    {% endblock %}
 
   </body>
 

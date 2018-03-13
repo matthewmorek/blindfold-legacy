@@ -11,6 +11,7 @@ module.exports = function (grunt) {
 
   // Load production tasks by default
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-postcss');
   grunt.loadNpmTasks('grunt-sass');
@@ -19,6 +20,17 @@ module.exports = function (grunt) {
     'public/css',
     'public/js'
   ]);
+
+  grunt.config('copy', {
+    dev: {
+      src: 'node_modules/vue/dist/vue.js',
+      dest: 'public/js/vue.js'
+    },
+    dist: {
+      src: 'node_modules/vue/dist/vue.min.js',
+      dest: 'public/js/vue.js'
+    }
+  });
 
   grunt.config('uglify', {
     options: {
@@ -42,7 +54,7 @@ module.exports = function (grunt) {
       files: {
         'public/js/bundle.js': [
           'assets/js/**/*.js',
-          'node_modules/whatwg-fetch/fetch.js'
+          'node_modules/whatwg-fetch/fetch.js',
         ]
       }
     }
@@ -148,9 +160,9 @@ module.exports = function (grunt) {
       tasks: ['nodemon:dev', 'watch']
     });
 
-    grunt.registerTask('build', ['clean', 'sass:dev', 'postcss:dev', 'eslint', 'uglify:dev']);
+    grunt.registerTask('build', ['clean', 'sass:dev', 'postcss:dev', 'eslint', 'uglify:dev', 'copy:dev']);
   }
 
-  grunt.registerTask('dist', ['clean', 'sass:dist', 'postcss:dist', 'uglify:dist']);
-  grunt.registerTask('default', ['concurrent']);
+  grunt.registerTask('dist', ['clean', 'sass:dist', 'postcss:dist', 'uglify:dist', 'copy:dist']);
+  grunt.registerTask('default', ['build', 'concurrent']);
 };
