@@ -1,6 +1,18 @@
-<header class="pa3 pa4-m mw6 ml-auto mr-auto tc">
-  <a href="{{ base_url }}">
-    <img src="{{ base_url }}/images/blindfold-icon.svg" alt="blindfold icon">
-  </a>
-  <h1 class="lh-solid mv1 f3">{{ meta.title }}</h1>
+<header class="mw6 ml-auto mr-auto tc bb b--near-white">
+  <div class="flex justify-between items-center pa3 pa4-m ">
+    <div class="flex items-center">
+      <a href="{{ base_url }}">
+        <img src="{{ base_url }}/images/blindfold-icon.svg" alt="blindfold icon" class="mw3 mw-auto-m v-mid">
+      </a>
+      <h1 class="lh-solid mv0 ml2 f3 {{ 'dn db-m' if user }}">{{ meta.title }}</h1>
+    </div>
+    {% if user %}
+    <div>
+      <div class="flex justify-end items-center">
+        <label class="mv0 mh2">{{ user.displayName }}</label>
+        <div><img src="{{ user.photos[0].value }}" alt="{{ user.displayName }}" class="w2 v-mid"></div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
 </header>
