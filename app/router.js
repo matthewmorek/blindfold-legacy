@@ -13,6 +13,7 @@ const bodyParser = require('body-parser');
 const cookies = require('cookie-parser');
 const login = require('connect-ensure-login');
 const logger = require('morgan');
+const cache = require('apicache').middleware;
 const passport = require('passport');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const Twitter = require('twitter');

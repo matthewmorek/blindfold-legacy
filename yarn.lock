@@ -105,6 +105,10 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
+apicache@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/apicache/-/apicache-1.2.1.tgz#765cec58aae5f48a9c71007d035f4110aa6fbeaf"
+
 aproba@^1.0.3:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
