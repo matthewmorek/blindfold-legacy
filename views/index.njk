@@ -15,21 +15,22 @@
     </p>
     <p class="lh-title tc"><small>You will have to confirm your intention after authorising the app with Twitter.</small></p>
   {% else %}
-    
     {% verbatim %}
 
     <div class="flex justify-center" id="app">
       <div>
-        <p v-if="rtBlocked > 0" class="tc">You currently block retweets for <strong>{{ rtBlocked }}</strong> followers.</p>
+        <p v-if="rtBlocked > 0" class="tc mb4">You are currently not seeing retweets for <strong>{{ rtBlocked }}</strong> of the people you follow.</p>
+        <p class="tc">
+          <button class="btn btn-primary w-100" @click="silenceTheLambs">Disable retweets</button>
+        </p>
+        <p class="f6 light-grey ttu tracked tc">or</p>
+        <p class="tc">
+          <button class="btn btn-secondary w-100" :disabled="rtBlocked == 0" @click="releaseTheKraken">Enable retweets</button>
+        </p>
       </div>
     </div>
 
     {% endverbatim %}
-    {# 
-    <p class="mv4">
-      <a href="{{ base_url }}/wrap" class="btn btn-primary db ttu">Restore my sanity</a>
-    </p>
-    #}
   {% endif %}
 </main>
 {% endblock %}
@@ -42,15 +43,42 @@
       var app = new Vue({
         el: '#app',
         data: {
-          rtBlocked: ''
+          rtBlocked: null,
+          following: null
+        },
+        methods: {
+          updateFriendship: function (wantRetweets) {
+            var _self = this;
+            fetch('/friends', {
+              method: 'POST',
+              body: JSON.stringify({
+                want_retweets: wantRetweets
+              }),
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }).then(function (response) {
+              return response.json();
+            }).then(function (json) {
+              _self.rtBlocked = json.retweeters_blocked.count;
+            });
+            console.log('lambs have been silenced');
+          },
+          silenceTheLambs: function (ev) {
+            this.updateFriendship(false);
+          },
+          releaseTheKraken: function (ev) {
+            this.updateFriendship(true);
+          }
         },
         mounted: function () {
           var _self = this;
           _self.$nextTick(function () {
-            fetch('/wrap').then(function (response) {
+            fetch('/friends').then(function (response) {
               return response.json();
             }).then(function (json) {
-              _self.rtBlocked = json.retweeters_blocked;
+              _self.rtBlocked = json.retweeters_blocked.count;
+              _self.following = json.following;
             });
           });
         }

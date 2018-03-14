@@ -104,12 +104,69 @@ module.exports.init = (app, config) => {
     res.redirect('/');
   });
 
-  app.get('/wrap', login.ensureLoggedIn('/auth'), function (req, res) {
+  app.get('/friends', function (req, res, next) {
+    // Define a payload response object
+    res.payload = {};
+    // Fetch number of retweeters blocked
     twitter.get('friendships/no_retweets/ids', function (error, response) {
       if (error) {
         console.log(twitter);
       } else {
-        res.json({'retweeters_blocked': response.length});
+        res.payload.retweeters_blocked = {
+          count: response.length,
+          ids: response
+        };
+        next();
+      }
+    });
+  }, function (req, res, next) {
+    // Fetch number of friends (people you follow)
+    twitter.get('friends/ids', { stringify_ids: true }, function (error, response) {
+      if (error) {
+        console.log(twitter);
+      } else {
+        res.payload.following = response.ids;
+        next();
+      }
+    });
+  }, function (req, res) {
+    res.json(res.payload);
+  });
+
+  app.post('/friends', function (req, res, next) {
+    twitter.get('friends/ids', { stringify_ids: true }).then(function (response) {
+      res.following = response.ids;
+      next();
+    }).catch(function (error) {
+      console.log(error);
+    });
+  }, function (req, res, next) {
+    var following = res.following;
+
+    Promise.all(following.map(function (id) {
+      return twitter.post('friendships/update', {
+        user_id: id,
+        retweets: req.body.want_retweets
+      }).then(function (response) {
+      }).catch(function (error) {
+        console.log(error);
+      });
+    })).then(function (data) {
+      next();
+    }).catch(function (error) {
+      console.log(error);
+    });
+  }, function (req, res) {
+    twitter.get('friendships/no_retweets/ids', function (error, response) {
+      if (error) {
+        console.log(response);
+      } else {
+        res.json({
+          retweeters_blocked: {
+            count: response.length,
+            ids: response
+          }
+        });
       }
     });
   });
