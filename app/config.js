@@ -6,9 +6,10 @@ class Config {
     this.root = path.normalize(path.join(__dirname, '/..'));
     this.rootPath = process.env.ROOT_PATH || '/';
     this.port = parseInt(process.env.PORT) || 3000;
-    this.env = process.env.NODE_ENV || 'development';
+    this.env = process.env.NODE_ENV || 'production';
     this.server_cache = process.env.SERVER_CACHE || true;
     this.server_watch = process.env.SERVER_WATCH || false;
+    this.site_url = process.env.SITE_URL || 'localhost';
   }
 }
 

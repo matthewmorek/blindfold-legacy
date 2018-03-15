@@ -43,7 +43,7 @@ module.exports.init = (app, config) => {
     {
       consumerKey: 'KKI0G62PzImVqbJJTo62DJCrI',
       consumerSecret: 'v7ctyWhI5Kd4SiIoXrDQBXl9dHHnVcsa0JusUKQ2fflcbVXfbT',
-      callbackURL: 'http://127.0.0.1:' + config.port + '/auth/callback'
+      callbackURL: 'http://' + config.site_url + ':' + config.port + '/auth/callback'
     },
     function (token, tokenSecret, profile, cb) {
       // Define auth details for interacting with Twitter API
