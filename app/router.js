@@ -147,7 +147,7 @@ module.exports.init = (app, config) => {
       res.following = response.ids;
       next();
     }).catch(function (error) {
-      console.log(error);
+      res.json(error);
     });
   }, function (req, res, next) {
     var following = res.following;
@@ -158,17 +158,17 @@ module.exports.init = (app, config) => {
         retweets: req.body.want_retweets
       }).then(function (response) {
       }).catch(function (error) {
-        console.log(error);
+        res.json(error);
       });
     })).then(function (data) {
       next();
     }).catch(function (error) {
-      console.log(error);
+      res.json(error);
     });
   }, function (req, res) {
     twitter.get('friendships/no_retweets/ids', function (error, response) {
       if (error) {
-        console.log(response);
+        res.json(response);
       } else {
         res.json({
           retweeters_blocked: {
