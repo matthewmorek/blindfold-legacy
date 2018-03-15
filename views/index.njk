@@ -18,14 +18,25 @@
     {% verbatim %}
 
     <div class="flex justify-center" id="app">
-      <div>
-        <p v-if="rtBlocked > 0" class="tc mb4">You are currently not seeing retweets for <strong>{{ rtBlocked }}</strong> of the people you follow.</p>
+      <div class="w-100">
+        <h3 class="tc mb4 normal">Retweets are <strong>{{ isMaxBlocked }}</strong> for all people you follow.</h3>
         <p class="tc">
-          <button class="btn btn-primary w-100" @click="silenceTheLambs">Disable retweets</button>
+          <btn-progress
+            css="btn btn-primary w5"
+            label="Disable retweets"
+            :activity="isActiveOff"
+            @click="silenceTheLambs">
+          </btn-progress>
         </p>
         <p class="f6 light-grey ttu tracked tc">or</p>
         <p class="tc">
-          <button class="btn btn-secondary w-100" :disabled="rtBlocked == 0" @click="releaseTheKraken">Enable retweets</button>
+          <btn-progress
+            css="btn btn-secondary w5"
+            label="Enable retweets"
+            :activity="isActiveOn"
+            :disabled="rtBlocked == 0"
+            @click="releaseTheKraken">
+          </btn-progress>
         </p>
       </div>
     </div>
@@ -37,14 +48,36 @@
 
 {% block scripts %}
   {% if user %}
+    {% verbatim %}
     <script>
       /* global Vue */
       /* eslint indent: 0 */
+      Vue.component('btn-progress', {
+        props: ['activity', 'label', 'css', 'disabled'],
+        template: '<button :class="css" :disabled="disabled" @click="btnClick"><span v-show="!activity" class="db mv1">{{ label }}</span><span class="spinner" v-show="activity"><span class="double-bounce1"></span><span class="double-bounce2"></span></span></button>',
+        methods: {
+          btnClick: function () {
+            this.$emit('click');
+          }
+        }
+      });
+
       var app = new Vue({
         el: '#app',
         data: {
           rtBlocked: null,
-          following: null
+          following: null,
+          isActiveOn: false,
+          isActiveOff: false
+        },
+        computed: {
+          isMaxBlocked: function () {
+            if (this.rtBlocked >= this.following) {
+              return 'disabled';
+            } else {
+              return 'enabled';
+            }
+          }
         },
         methods: {
           updateFriendship: function (wantRetweets) {
@@ -61,13 +94,16 @@
               return response.json();
             }).then(function (json) {
               _self.rtBlocked = json.retweeters_blocked.count;
+              _self.isActiveOff = false;
+              _self.isActiveOn = false;
             });
-            console.log('lambs have been silenced');
           },
           silenceTheLambs: function (ev) {
+            this.isActiveOff = true;
             this.updateFriendship(false);
           },
           releaseTheKraken: function (ev) {
+            this.isActiveOn = true;
             this.updateFriendship(true);
           }
         },
@@ -78,11 +114,12 @@
               return response.json();
             }).then(function (json) {
               _self.rtBlocked = json.retweeters_blocked.count;
-              _self.following = json.following;
+              _self.following = json.following.length;
             });
           });
         }
       });
     </script>
+    {% endverbatim %}
   {% endif %}
 {% endblock %}
