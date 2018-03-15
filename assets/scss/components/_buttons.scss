@@ -6,6 +6,7 @@
   padding-bottom: 1rem;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
+  line-height: 1.25;
   font-family: $font-family;
   box-shadow:
     0 1px 3px 0 rgba(0,0,0,0.15),
@@ -45,5 +46,9 @@
 
   &:hover {
     background-color: $brand-near-white;
+  }
+
+  &[disabled] {
+    opacity: 0.4; 
   }
 }

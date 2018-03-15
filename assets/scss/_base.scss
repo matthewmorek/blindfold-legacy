@@ -27,7 +27,7 @@ h2, .h2 {
   @include typi("h2");
   margin-top: 0.75em;
   margin-bottom: 0.75em;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   font-weight: 700;
 }
 
@@ -73,6 +73,20 @@ pre {
 
 .footer {
   border-top: 1px solid $grey-lightest;
+}
+
+.content {
+  a:not(.btn) {
+    &:link {
+      color: darken($brand-primary, 15%);
+      text-decoration: underline;
+      text-decoration-skip: ink;
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }
 
 small {
