@@ -4,3 +4,4 @@ node_modules
 *.log
 public/js/*
 public/css/*
+/session-store.db

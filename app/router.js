@@ -6,6 +6,7 @@ const express = require('express');
 const sanitizer = require('express-sanitizer');
 const session = require('express-session');
 const config = require('./config');
+const LokiStore = require('connect-loki')(session);
 const path = require('path');
 const helmet = require('helmet');
 const nunjucks = require('nunjucks');
@@ -21,6 +22,15 @@ const Twitter = require('twitter');
 module.exports.init = (app, config) => {
   var twitter;
   var _templates = path.join(__dirname, './../views');
+  var _session = {
+    secret: 'fire @jack',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      secure: (config.env === 'production' ? true : false)
+    },
+    store: new LokiStore()
+  };
 
   nunjucks.configure(_templates, {
     autoescape: true,
@@ -67,7 +77,7 @@ module.exports.init = (app, config) => {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookies());
   app.use(sanitizer());
-  app.use(session({ secret: 'fire @jack', resave: true, saveUninitialized: true }));
+  app.use(session(_session));
 
   app.use(passport.initialize());
   app.use(passport.session());
