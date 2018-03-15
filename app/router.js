@@ -104,13 +104,13 @@ module.exports.init = (app, config) => {
     res.redirect('/');
   });
 
-  app.get('/friends', function (req, res, next) {
+  app.get('/friends', cache('5 minutes'), function (req, res, next) {
     // Define a payload response object
     res.payload = {};
     // Fetch number of retweeters blocked
     twitter.get('friendships/no_retweets/ids', function (error, response) {
       if (error) {
-        console.log(twitter);
+        res.json(error);
       } else {
         res.payload.retweeters_blocked = {
           count: response.length,
@@ -123,7 +123,7 @@ module.exports.init = (app, config) => {
     // Fetch number of friends (people you follow)
     twitter.get('friends/ids', { stringify_ids: true }, function (error, response) {
       if (error) {
-        console.log(twitter);
+        res.json(error);
       } else {
         res.payload.following = response.ids;
         next();
