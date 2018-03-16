@@ -9,7 +9,7 @@ class Config {
     this.env = process.env.NODE_ENV || 'production';
     this.server_cache = process.env.SERVER_CACHE || true;
     this.server_watch = process.env.SERVER_WATCH || false;
-    this.site_url = process.env.SITE_URL || 'localhost';
+    this.site_host = process.env.SITE_HOST || '127.0.0.1';
   }
 }
 
