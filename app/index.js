@@ -17,7 +17,7 @@ router.init(app, config);
 app.listen(config.port, function () {
   if (config.env !== 'production') {
     bs.init({
-      proxy: 'localhost:' + config.port,
+      proxy: config.site_host + ':' + config.port,
       port: 4000,
       files: [
         'public/**/*.{js,css}',
@@ -26,6 +26,7 @@ app.listen(config.port, function () {
       reloadOnRestart: true,
       open: false
     });
-    // console.log('Listening on http://localhost:' + config.server.port);
+  } else {
+    console.log('Listening on http://' + config.site_host + ':' + config.port);
   }
 });
