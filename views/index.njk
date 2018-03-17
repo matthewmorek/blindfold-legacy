@@ -21,12 +21,13 @@
 
     <div class="flex justify-center" id="app">
       <div class="w-100 pv3 pv4-m">
-        <h3 class="tc mt0 mb4 normal">Retweets are <strong>{{ isMaxBlocked }}</strong> for all people you follow.</h3>
+        <h3 class="tc mt0 mb4 normal ph4-m">Retweets are <strong>{{ isMaxBlocked }}</strong> for all people you follow.</h3>
         <p class="tc">
           <btn-progress
             css="btn btn-primary w5"
             label="Disable retweets"
             :activity="isActiveOff"
+            :disabled="isActiveOn"
             @click="silenceTheLambs">
           </btn-progress>
         </p>
@@ -36,6 +37,7 @@
             css="btn btn-secondary w5"
             label="Enable retweets"
             :activity="isActiveOn"
+            :disabled="isActiveOff"
             :disabled="rtBlocked == 0"
             @click="releaseTheKraken">
           </btn-progress>
