@@ -4,14 +4,12 @@
 /* eslint no-multi-spaces: 0 */
 const express = require('express');
 const sanitizer = require('express-sanitizer');
-const session = require('express-session');
+const session = require('cookie-session');
 const config = require('./config');
-const LokiStore = require('connect-loki')(session);
 const path = require('path');
 const helmet = require('helmet');
 const nunjucks = require('nunjucks');
 const bodyParser = require('body-parser');
-const cookies = require('cookie-parser');
 const logger = require('morgan');
 const cache = require('apicache').middleware;
 const passport = require('passport');
@@ -19,16 +17,10 @@ const TwitterStrategy = require('passport-twitter').Strategy;
 const Twitter = require('twitter');
 
 module.exports.init = (app, config) => {
-  var twitter;
+  var _twitter;
   var _templates = path.join(__dirname, './../views');
   var _session = {
-    secret: 'fire @jack',
-    resave: true,
-    saveUninitialized: true,
-    cookie: {
-      secure: (config.env === 'production' ? true : false)
-    },
-    store: new LokiStore()
+    secret: 'fire @jack'
   };
 
   nunjucks.configure(_templates, {
@@ -42,17 +34,15 @@ module.exports.init = (app, config) => {
     {
       consumerKey: 'KKI0G62PzImVqbJJTo62DJCrI',
       consumerSecret: 'v7ctyWhI5Kd4SiIoXrDQBXl9dHHnVcsa0JusUKQ2fflcbVXfbT',
-      callbackURL: 'http://' + config.site_url + ':' + config.port + '/auth/callback'
+      callbackURL: 'http://' + config.site_host + ':' + config.port + '/auth/callback'
     },
     function (token, tokenSecret, profile, cb) {
-      // Define auth details for interacting with Twitter API
-      twitter = new Twitter({
+      return cb(null, profile, {
         consumer_key: 'KKI0G62PzImVqbJJTo62DJCrI',
         consumer_secret: 'v7ctyWhI5Kd4SiIoXrDQBXl9dHHnVcsa0JusUKQ2fflcbVXfbT',
         access_token_key: token,
         access_token_secret: tokenSecret
       });
-      return cb(null, profile);
     }
   ));
 
@@ -74,7 +64,6 @@ module.exports.init = (app, config) => {
   app.use(express.static(path.join(__dirname, './../public'), { index: false }));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(cookies());
   app.use(sanitizer());
   app.use(session(_session));
 
@@ -86,7 +75,6 @@ module.exports.init = (app, config) => {
     // define basic context for the templates
     context.base_url = req.protocol + '://' + req.get('host');
     context.page_url = context.base_url + req.path;
-    context.user = req.user;
     context.meta = {
       language: 'en',
       locale: 'en_GB',
@@ -100,6 +88,11 @@ module.exports.init = (app, config) => {
         creator: 'matthewmorek'
       }
     };
+    context.user = req.session.user;
+
+    if (req.session.auth) {
+      _twitter = new Twitter(req.session.auth);
+    }
 
     res.render('index', context);
   });
@@ -108,16 +101,26 @@ module.exports.init = (app, config) => {
   app.get('/auth', passport.authenticate('twitter'));
 
   // Process Twitter callback and verify authentication
-  app.get('/auth/callback', passport.authenticate('twitter', { failureRedirect: '/404' }), function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
+  app.get('/auth/callback', function(req, res, next) {
+    passport.authenticate('twitter', { session: false }, function(err, user, info, status) {
+      if (err) { return next(err); }
+      if (!user) { return res.redirect('/404'); }
+      req.session.auth = info;
+      req.session.user = {
+        id: user.id,
+        displayName: user.displayName,
+        photo: user.photos[0].value
+      };
+      res.redirect('/');
+    })(req, res, next);
   });
 
+  // Fetch data about friendships from the API
   app.get('/friends', cache('5 minutes'), function (req, res, next) {
     // Define a payload response object
     res.payload = {};
     // Fetch number of retweeters blocked
-    twitter.get('friendships/no_retweets/ids', function (error, response) {
+    _twitter.get('friendships/no_retweets/ids', function (error, response) {
       if (error) {
         res.json(error);
       } else {
@@ -130,7 +133,7 @@ module.exports.init = (app, config) => {
     });
   }, function (req, res, next) {
     // Fetch number of friends (people you follow)
-    twitter.get('friends/ids', { stringify_ids: true }, function (error, response) {
+    _twitter.get('friends/ids', { stringify_ids: true }, function (error, response) {
       if (error) {
         res.json(error);
       } else {
@@ -143,7 +146,7 @@ module.exports.init = (app, config) => {
   });
 
   app.post('/friends', function (req, res, next) {
-    twitter.get('friends/ids', { stringify_ids: true }).then(function (response) {
+    _twitter.get('friends/ids', { stringify_ids: true }).then(function (response) {
       res.following = response.ids;
       next();
     }).catch(function (error) {
@@ -153,7 +156,7 @@ module.exports.init = (app, config) => {
     var following = res.following;
 
     Promise.all(following.map(function (id) {
-      return twitter.post('friendships/update', {
+      return _twitter.post('friendships/update', {
         user_id: id,
         retweets: req.body.want_retweets
       }).then(function (response) {
@@ -166,7 +169,7 @@ module.exports.init = (app, config) => {
       res.json(error);
     });
   }, function (req, res) {
-    twitter.get('friendships/no_retweets/ids', function (error, response) {
+    _twitter.get('friendships/no_retweets/ids', function (error, response) {
       if (error) {
         res.json(response);
       } else {
