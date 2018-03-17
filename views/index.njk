@@ -76,8 +76,10 @@
           isMaxBlocked: function () {
             if (this.rtBlocked >= this.following) {
               return 'disabled';
-            } else {
+            } else if (this.rtBlocked === 0) {
               return 'enabled';
+            } else {
+              return '---';
             }
           }
         },
