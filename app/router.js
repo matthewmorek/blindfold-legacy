@@ -80,8 +80,8 @@ module.exports.init = (app, config) => {
       locale: 'en_GB',
       author: 'Matthew Morek',
       title: 'Blindfold',
-      subtitle: 'Disable retweets from people you follow, all at once.',
-      description: '',
+      subtitle: 'Turn off retweets from people you follow, all at once.',
+      description: 'Not seeing retweets in your feed helps your mind stay free of all the negativity that they usually amplify.',
       og_type: 'website',
       twitter: {
         card: 'summary_large_image',
