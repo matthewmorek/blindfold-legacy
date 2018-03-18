@@ -83,6 +83,7 @@ module.exports.init = (app, config) => {
       subtitle: 'Turn off retweets from people you follow, all at once.',
       description: 'Not seeing retweets in your feed helps your mind stay free of all the negativity that they usually amplify.',
       og_type: 'website',
+      // og_image: '/images/og-splash.png',
       twitter: {
         card: 'summary_large_image',
         creator: 'matthewmorek'
