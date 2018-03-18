@@ -13,7 +13,10 @@
     inset 0 -1px 0 0 rgba(0,0,0,0.15),
     inset 0 1px 0 0 rgba(255,255,255,0.1);
   border-radius: 4px;
-  border: 0;
+  border-color: transaprent;
+  border-width: 0;
+  border-style: solid;
+  background-color: transparent;
   transition: background-color 0.2s cubic-bezier(0,.35,.76,.58);
 
   &[disabled] {
@@ -30,22 +33,29 @@
   background-color: $brand-primary;
 
   &:hover {
-    background-color: lighten($brand-primary, 10%);
+    background-color: lighten($brand-primary, 5%);
+    transition:
+      0.15s background-color ease-in;
   }
 }
 
 .btn-secondary {
-  color: $black;
+  color: $brand-primary;
   font-weight: bold;
   letter-spacing: 1px;
   text-transform: uppercase;
-  background-color: $brand-pale-grey;
+  border-width: 1px;
+  border-color: $brand-primary;
   box-shadow:
     0 1px 3px 0 rgba(0,0,0,0.1),
-    inset 0 -1px 0 0 rgba(0,0,0,0.1),
+    // inset 0 -1px 0 0 rgba(0,0,0,0.1),
     inset 0 1px 0 0 rgba(255,255,255,0.1);
 
   &:hover {
-    background-color: $brand-near-white;
+    border-color: darken($brand-primary, 15%);
+    color: darken($brand-primary, 15%);
+    transition:
+      0.15s color ease-in,
+      0.15s border-color ease-in;
   }
 }
