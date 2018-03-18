@@ -82,7 +82,7 @@ module.exports.init = (app, config) => {
       title: 'Blindfold',
       description: 'Turn off retweets from people you follow, all at once.',
       og_type: 'website',
-      og_image: '/images/og-splash.png',
+      og_image: '/images/og-image.png',
       twitter: {
         card: 'summary_large_image',
         creator: 'matthewmorek'
