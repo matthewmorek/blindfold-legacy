@@ -21,7 +21,7 @@
 <meta property="og:locale" content="{{ meta.locale }}">
 
 <!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="{{ 'summary_large_image' if page_image else 'summary' }}">
 <meta name="twitter:creator" content="@{{ meta.twitter.creator }}">
 <meta name="twitter:url" content="{{ page_url }}">
 <meta name="twitter:title" content="{{ page_title }}">
