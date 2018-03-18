@@ -1,4 +1,4 @@
-{% set page_title = meta.title + ' — ' + page_title %}
+{% set page_title = (meta.title + ' — ' + page_title) if page_title else meta.title %}
 {% set page_image = page_image or '/images/favicon/favicon-196.png' %}
 
 <meta charset="utf-8">
