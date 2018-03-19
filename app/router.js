@@ -129,9 +129,9 @@ module.exports.init = (app, config) => {
     // Define a payload response object
     res.payload = {};
     // Fetch number of retweeters blocked
-    _twitter.get('friendships/no_retweets/ids', function (error, response) {
-      if (error) {
-        res.json(error);
+    _twitter.get('friendships/no_retweets/ids', function (errors, response) {
+      if (errors) {
+        res.json({errors: errors});
       } else {
         var retweeters_blocked = {
           count: response.length,
@@ -144,9 +144,9 @@ module.exports.init = (app, config) => {
     });
   }, function (req, res, next) {
     // Fetch number of friends (people you follow)
-    _twitter.get('friends/ids', { stringify_ids: true }, function (error, response) {
-      if (error) {
-        res.json(error);
+    _twitter.get('friends/ids', { stringify_ids: true }, function (errors, response) {
+      if (errors) {
+        res.json({errors: errors});
       } else {
         res.payload.following = response.ids;
         next();
