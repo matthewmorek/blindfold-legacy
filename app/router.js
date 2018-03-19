@@ -11,7 +11,8 @@ const helmet = require('helmet');
 const nunjucks = require('nunjucks');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
-const cache = require('apicache').middleware;
+const cache = require('apicache');
+const cacheMiddleware = cache.middleware;
 const passport = require('passport');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const Twitter = require('twitter');
@@ -101,8 +102,8 @@ module.exports.init = (app, config) => {
   app.get('/auth', passport.authenticate('twitter'));
 
   // Process Twitter callback and verify authentication
-  app.get('/auth/callback', function(req, res, next) {
-    passport.authenticate('twitter', { session: false }, function(err, user, info, status) {
+  app.get('/auth/callback', function (req, res, next) {
+    passport.authenticate('twitter', { session: false }, function (err, user, info, status) {
       if (err) { return next(err); }
       if (!user) { return res.redirect('/404'); }
       req.session.auth = info;
@@ -116,8 +117,13 @@ module.exports.init = (app, config) => {
     })(req, res, next);
   });
 
+  var isProduction = function () {
+    return (config.env === 'production' ? true : false);
+  };
+
   // Fetch data about friendships from the API
-  app.get('/friends', cache('5 minutes'), function (req, res, next) {
+  app.get('/friends', cacheMiddleware('5 minutes', isProduction), function (req, res, next) {
+    req.apicacheGroup = 'friends';
     // Define a payload response object
     res.payload = {};
     // Fetch number of retweeters blocked
@@ -125,10 +131,12 @@ module.exports.init = (app, config) => {
       if (error) {
         res.json(error);
       } else {
-        res.payload.retweeters_blocked = {
+        var rtsBlocked = {
           count: response.length,
           ids: response
         };
+        console.log(rtsBlocked);
+        res.payload.retweeters_blocked = rtsBlocked;
         next();
       }
     });
@@ -174,6 +182,13 @@ module.exports.init = (app, config) => {
       if (errors) {
         res.json({errors: errors});
       } else {
+        cache.clear('friends');
+        console.log({
+          retweeters_blocked: {
+            count: response.length,
+            ids: response
+          }
+        });
         res.json({
           retweeters_blocked: {
             count: response.length,
