@@ -163,16 +163,19 @@ module.exports.init = (app, config) => {
     });
   }, function (req, res, next) {
     var following = res.following;
+    var count = 0;
 
     Promise.all(following.map(function (id) {
       return _twitter.post('friendships/update', {
         user_id: id,
         retweets: req.body.want_retweets
       }).then(function (response) {
+        count += 1;
       }).catch(function (errors) {
         res.json({errors: errors});
       });
     })).then(function (data) {
+      console.log({count: count });
       next();
     }).catch(function (errors) {
       res.json({errors: errors});
