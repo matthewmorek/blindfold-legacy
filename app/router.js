@@ -131,12 +131,12 @@ module.exports.init = (app, config) => {
       if (error) {
         res.json(error);
       } else {
-        var rtsBlocked = {
+        var retweeters_blocked = {
           count: response.length,
           ids: response
         };
-        console.log(rtsBlocked);
-        res.payload.retweeters_blocked = rtsBlocked;
+        console.log({ retweeters_blocked: response.length });
+        res.payload.retweeters_blocked = retweeters_blocked;
         next();
       }
     });
@@ -183,12 +183,7 @@ module.exports.init = (app, config) => {
         res.json({errors: errors});
       } else {
         cache.clear('friends');
-        console.log({
-          retweeters_blocked: {
-            count: response.length,
-            ids: response
-          }
-        });
+        console.log({ retweeters_blocked: response.length });
         res.json({
           retweeters_blocked: {
             count: response.length,
