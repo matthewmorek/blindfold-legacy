@@ -23,6 +23,10 @@
     transition: 0.1s opacity ease-in;
     opacity: 0.4; 
   }
+
+  &.set {
+    width: 14rem;
+  }
 }
 
 .btn-primary {
