@@ -5,9 +5,9 @@
 {% extends "layouts/main.njk" %}
 
 {% block body %}
-<main class="pa3 mw6 ml-auto mr-auto">
+<main class="pa3 ph4-m mw6 ml-auto mr-auto">
   {% if not user %}
-  <div class="ph4-ns content">
+  <div class="content">
     <h2 class="f3 tc">Turn off retweets from the people you follow.</h2>
     <p>Not seeing retweets in your feed helps your mind stay free of all the negativity that they usually amplify.</p>
     <p><em>The Atlantic</em> made a great <a href="https://www.theatlantic.com/magazine/archive/2018/04/the-case-against-retweets/554078/">case for turning off your retweets</a> and you should give it a read.</p>
@@ -26,27 +26,30 @@
       </transition>
 
       <div class="w-100 pv3 pv4-m">
-        <h3 class="tc mt0 mb4 normal ph4">Retweets are <strong>{{ isMaxBlocked }}</strong> for all people you follow.</h3>
-        <p class="tc">
+        <h2 class="tc mt3 mb2 normal ph4">Retweets: <strong class="ttu tracked">{{ isMaxBlocked }}</strong></h2>
+        <p class="tc i" v-if="isMaxBlocked === 'hidden'">Enjoy your improved feed!</p>
+        <p class="mb4" v-if="isAnomaly">However, we found some “ghost” user IDs on your account. We think this is an issue with Twitter’s datasets, as these IDs do not belong to any currently active user of the platform.</p>  
+        
+        <div class="tc mv4 flex-ns justify-around items-center">
           <btn-progress
-            css="btn btn-primary w5"
-            label="Disable retweets"
+            css="btn btn-primary set"
+            label="Hide retweets"
             :activity="isActiveOff"
             :disabled="isActiveOn"
             @click="silenceTheLambs">
           </btn-progress>
-        </p>
-        <p class="f7 light-silver ttu tracked tc">or</p>
-        <p class="tc">
+          <span class="f7 light-silver ttu tracked tc pa3 db">or</span>
           <btn-progress
-            css="btn btn-secondary w5"
-            label="Enable retweets"
+            css="btn btn-secondary set"
+            label="Show retweets"
             :activity="isActiveOn"
             :disabled="isActiveOff"
             :disabled="rtBlocked == 0"
             @click="releaseTheKraken">
           </btn-progress>
-        </p>
+        </div>
+
+        <p class="lh-title tc ph4"><small>This will only affect pure retweets. You will still see promoted tweets, quote-tweets and tweet cards.</small></p>
       </div>
     </div>
 
@@ -86,6 +89,7 @@
         data: {
           rtBlocked: null,
           following: null,
+          isAnomaly: false,
           isActiveOn: false,
           isActiveOff: false,
           errors: []
@@ -93,11 +97,14 @@
         computed: {
           isMaxBlocked: function () {
             if (this.rtBlocked >= this.following) {
-              return 'disabled';
+              this.isAnomaly = false;
+              return 'hidden';
             } else if (this.rtBlocked === 0) {
-              return 'enabled';
+              this.isAnomaly = false;
+              return 'visible';
             } else {
-              return '???';
+              this.isAnomaly = true;
+              return 'visible';
             }
           }
         },
