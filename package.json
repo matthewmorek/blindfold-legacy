@@ -39,6 +39,7 @@
     "passport-twitter": "^1.0.4",
     "postcss-discard-duplicates": "^2.1.0",
     "postcss-scss": "^1.0.2",
+    "promise-limit": "^2.6.0",
     "tachyons-sass": "^4.8.1",
     "twitter": "^1.7.1",
     "typi": "^3.1.2",

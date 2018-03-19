@@ -2,6 +2,7 @@
  * Node.js Server Script
  */
 /* eslint no-multi-spaces: 0 */
+const promiseLimit = require('promise-limit');
 const express = require('express');
 const sanitizer = require('express-sanitizer');
 const session = require('cookie-session');
@@ -19,6 +20,7 @@ const Twitter = require('twitter');
 
 module.exports.init = (app, config) => {
   var _twitter;
+  var _limit = promiseLimit(25);
   var _templates = path.join(__dirname, './../views');
   var _session = {
     secret: 'fire @jack'
@@ -166,16 +168,18 @@ module.exports.init = (app, config) => {
     var count = 0;
 
     Promise.all(following.map(function (id) {
-      return _twitter.post('friendships/update', {
-        user_id: id,
-        retweets: req.body.want_retweets
-      }).then(function (response) {
-        count += 1;
-      }).catch(function (errors) {
-        res.json({errors: errors});
+      return _limit(function () {
+        return _twitter.post('friendships/update', {
+          user_id: id,
+          retweets: req.body.want_retweets
+        }).then(function (response) {
+          count += 1;
+        }).catch(function (errors) {
+          res.json({errors: errors});
+        });
       });
     })).then(function (data) {
-      console.log({count: count });
+      console.log({ count: count });
       next();
     }).catch(function (errors) {
       res.json({errors: errors});
