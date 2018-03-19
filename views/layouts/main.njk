@@ -2,7 +2,7 @@
 <html lang="{{ meta.language }}">
   {% include "partials/head.njk" %}
 
-  <body id="body"{% if not user %} class="flex flex-column justify-center min-vh-100"{% endif %}>
+  <body id="body" class="{% if not user %}flex flex-column justify-center min-vh-100{% else %}mw6 relative ml-auto mr-auto{% endif %}">
     {% include "partials/header.njk" %}
 
     {% block body %}

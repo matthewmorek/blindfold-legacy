@@ -5,7 +5,7 @@
 {% extends "layouts/main.njk" %}
 
 {% block body %}
-<main class="pa3 ph4-m mw6 ml-auto mr-auto">
+<main class="pa3 ph0-l">
   {% if not user %}
   <div class="content">
     <h2 class="f3 tc">Turn off retweets from the people you follow.</h2>
@@ -26,16 +26,16 @@
       </transition>
 
       <div class="w-100 pv3 pv4-m">
-        <h2 class="tc mt3 mb2 normal ph4">Retweets: <strong class="ttu tracked">{{ isMaxBlocked }}</strong></h2>
-        <p class="tc i" v-if="isMaxBlocked === 'hidden'">Enjoy your improved feed!</p>
+        <h2 class="tc mv2 normal ph4">Retweets: <strong class="ttu tracked">{{ isMaxBlocked }}</strong></h2>
+        <p class="tc i" v-if="isMaxBlocked === 'hidden'">Enjoy an improved feed!</p>
         <p class="mb4" v-if="isAnomaly">However, we found some “ghost” user IDs on your account. We think this is an issue with Twitter’s datasets, as these IDs do not belong to any currently active user of the platform.</p>  
         
-        <div class="tc mv4 flex-ns justify-around items-center">
+        <div class="tc mv4 flex-ns justify-between items-center">
           <btn-progress
             css="btn btn-primary set"
             label="Hide retweets"
             :activity="isActiveOff"
-            :disabled="isActiveOn"
+            :disabled="isProcessing"
             @click="silenceTheLambs">
           </btn-progress>
           <span class="f7 light-silver ttu tracked tc pa3 db">or</span>
@@ -43,13 +43,13 @@
             css="btn btn-secondary set"
             label="Show retweets"
             :activity="isActiveOn"
-            :disabled="isActiveOff"
+            :disabled="isProcessing"
             :disabled="rtBlocked == 0"
             @click="releaseTheKraken">
           </btn-progress>
         </div>
 
-        <p class="lh-title tc ph4"><small>This will only affect pure retweets. You will still see promoted tweets, quote-tweets and tweet cards.</small></p>
+        <p class="lh-title tc ph5-m"><small>Using Blindfold will only affect <em>retweets</em>. You will still see promoted tweets, quote tweets and cards.</small></p>
       </div>
     </div>
 
@@ -76,7 +76,7 @@
 
       Vue.component('err-msg', {
         props: ['errors'],
-        template: '<div @click="errClick" class="absolute top-0 left-0 w-100 bg-light-red near-black"><ul v-for="error in errors"><li>{{ error.message }}</li></ul></div>',
+        template: '<div @click="errClick" class="err absolute top-0 left-0 w-100 bg-light-red near-black"><ul v-for="error in errors"><li>{{ error.message }}</li></ul></div>',
         methods: {
           errClick: function () {
             this.$emit('click');
@@ -92,6 +92,7 @@
           isAnomaly: false,
           isActiveOn: false,
           isActiveOff: false,
+          isProcessing: false,
           errors: []
         },
         computed: {
@@ -111,6 +112,7 @@
         methods: {
           updateFriendship: function (wantRetweets) {
             var _self = this;
+            _self.isProcessing = true;
             fetch('/friends', {
               method: 'POST',
               body: JSON.stringify({
@@ -129,6 +131,7 @@
               }
               _self.isActiveOff = false;
               _self.isActiveOn = false;
+              _self.isProcessing = false;
             });
           },
           silenceTheLambs: function (ev) {

@@ -20,7 +20,6 @@
   transition: background-color 0.2s cubic-bezier(0,.35,.76,.58);
 
   &[disabled] {
-    transition: 0.1s opacity ease-in;
     opacity: 0.4; 
   }
 

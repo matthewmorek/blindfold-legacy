@@ -94,6 +94,23 @@ small {
   color: $grey-dark;
 }
 
+.err {
+  position: relative;
+  border-radius: 0 0 3px 3px;
+
+  &::after {
+    position: absolute;
+    display: block;
+    // width: 24px;
+    // height: 24px;
+    content: "×";
+    top: calc(50% - 1.125rem);
+    right: 1.25rem;
+    font-size: 2rem;
+    line-height: 1;
+  }
+}
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity .275s;
 }
