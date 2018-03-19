@@ -21,8 +21,12 @@
     {% verbatim %}
 
     <div class="flex justify-center" id="app">
+      <transition name="fade">
+        <err-msg v-show="errors.length > 0" :errors="errors" @click="clearErrors"></err-msg>
+      </transition>
+
       <div class="w-100 pv3 pv4-m">
-        <h3 class="tc mt0 mb4 normal ph4-m">Retweets are <strong>{{ isMaxBlocked }}</strong> for all people you follow.</h3>
+        <h3 class="tc mt0 mb4 normal ph4">Retweets are <strong>{{ isMaxBlocked }}</strong> for all people you follow.</h3>
         <p class="tc">
           <btn-progress
             css="btn btn-primary w5"
@@ -67,13 +71,24 @@
         }
       });
 
+      Vue.component('err-msg', {
+        props: ['errors'],
+        template: '<div @click="errClick" class="absolute top-0 left-0 w-100 bg-light-red near-black"><ul v-for="error in errors"><li>{{ error.message }}</li></ul></div>',
+        methods: {
+          errClick: function () {
+            this.$emit('click');
+          }
+        }
+      });
+
       var app = new Vue({
         el: '#app',
         data: {
           rtBlocked: null,
           following: null,
           isActiveOn: false,
-          isActiveOff: false
+          isActiveOff: false,
+          errors: []
         },
         computed: {
           isMaxBlocked: function () {
@@ -82,7 +97,7 @@
             } else if (this.rtBlocked === 0) {
               return 'enabled';
             } else {
-              return '---';
+              return '???';
             }
           }
         },
@@ -100,7 +115,11 @@
             }).then(function (response) {
               return response.json();
             }).then(function (json) {
-              _self.rtBlocked = json.retweeters_blocked.count;
+              if (json.errors) {
+                _self.errors = json.errors;
+              } else {
+                _self.rtBlocked = json.retweeters_blocked.count;
+              }
               _self.isActiveOff = false;
               _self.isActiveOn = false;
             });
@@ -112,6 +131,9 @@
           releaseTheKraken: function (ev) {
             this.isActiveOn = true;
             this.updateFriendship(true);
+          },
+          clearErrors: function () {
+            this.errors = [];
           }
         },
         mounted: function () {
@@ -120,8 +142,12 @@
             fetch('/friends').then(function (response) {
               return response.json();
             }).then(function (json) {
-              _self.rtBlocked = json.retweeters_blocked.count;
-              _self.following = json.following.length;
+              if (json.errors) {
+                _self.errors = json.errors;
+              } else {
+                _self.rtBlocked = json.retweeters_blocked.count;
+                _self.following = json.following.length;
+              }
             });
           });
         }

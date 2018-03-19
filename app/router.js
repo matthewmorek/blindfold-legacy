@@ -108,6 +108,7 @@ module.exports.init = (app, config) => {
       req.session.auth = info;
       req.session.user = {
         id: user.id,
+        username: user.username,
         displayName: user.displayName,
         photo: user.photos[0].value
       };
@@ -149,8 +150,8 @@ module.exports.init = (app, config) => {
     _twitter.get('friends/ids', { stringify_ids: true }).then(function (response) {
       res.following = response.ids;
       next();
-    }).catch(function (error) {
-      res.json(error);
+    }).catch(function (errors) {
+      res.json({errors: errors});
     });
   }, function (req, res, next) {
     var following = res.following;
@@ -160,18 +161,18 @@ module.exports.init = (app, config) => {
         user_id: id,
         retweets: req.body.want_retweets
       }).then(function (response) {
-      }).catch(function (error) {
-        res.json(error);
+      }).catch(function (errors) {
+        res.json({errors: errors});
       });
     })).then(function (data) {
       next();
-    }).catch(function (error) {
-      res.json(error);
+    }).catch(function (errors) {
+      res.json({errors: errors});
     });
   }, function (req, res) {
-    _twitter.get('friendships/no_retweets/ids', function (error, response) {
-      if (error) {
-        res.json(response);
+    _twitter.get('friendships/no_retweets/ids', function (errors, response) {
+      if (errors) {
+        res.json({errors: errors});
       } else {
         res.json({
           retweeters_blocked: {
