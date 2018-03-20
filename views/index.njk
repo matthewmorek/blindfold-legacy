@@ -25,31 +25,51 @@
         <err-msg v-show="errors.length > 0" :errors="errors" @click="clearErrors"></err-msg>
       </transition>
 
-      <div class="w-100 pv3 pv4-m">
-        <h2 class="tc mv2 normal ph4">Retweets: <strong class="ttu tracked">{{ isMaxBlocked }}</strong></h2>
-        <p class="tc i" v-if="isMaxBlocked === 'hidden'">Enjoy an improved feed!</p>
-        <p class="mb4" v-if="isAnomaly">However, we found some “ghost” user IDs on your account. We think this is an issue with Twitter’s datasets, as these IDs do not belong to any currently active user of the platform.</p>  
-        
+      <div class="w-100 pv3 pv4-m">        
+        <h3 class="lh-title tc mv2">Tailor your Twitter feed:</h3>
         <div class="tc mv4 flex-ns justify-between items-center">
-          <btn-progress
-            css="btn btn-primary set"
-            label="Hide retweets"
-            :activity="isActiveOff"
-            :disabled="isProcessing"
-            @click="silenceTheLambs">
-          </btn-progress>
+          <transition name="rotate" mode="out-in">
+            <btn
+              css="btn btn-primary set"
+              label="Hide retweets"
+              :disabled="isProcessing"
+              v-if="offState === 'default'"
+              @click="silenceTheLambs">
+            </btn>
+            <btn-progress
+              css="btn btn-primary set"
+              v-if="offState === 'active'">
+            </btn-progress>
+            <btn-done
+              css="btn btn-primary set"
+              color="#fff"
+              v-if="offState === 'complete'">
+            </btn-done>
+          </transition>
+
           <span class="f7 light-silver ttu tracked tc pa3 db">or</span>
-          <btn-progress
-            css="btn btn-secondary set"
-            label="Show retweets"
-            :activity="isActiveOn"
-            :disabled="isProcessing"
-            :disabled="rtBlocked == 0"
-            @click="releaseTheKraken">
-          </btn-progress>
+          
+          <transition name="rotate" mode="out-in">
+            <btn
+              css="btn btn-secondary set"
+              label="Show retweets"
+              :disabled="isProcessing"
+              v-if="onState === 'default'"
+              @click="releaseTheKraken">
+            </btn>
+            <btn-progress
+              css="btn btn-secondary set"
+              v-if="onState === 'active'">
+            </btn-progress>
+            <btn-done
+              css="btn btn-secondary set"
+              color="#1da1f2"
+              v-if="onState === 'complete'">
+            </btn-done>
+          </transition>
         </div>
 
-        <p class="lh-title tc ph5-m"><small>Using Blindfold will only affect <em>retweets</em>. You will still see promoted tweets, quote tweets and cards.</small></p>
+        <p class="lh-title tc ph5-m"><small>Using <em>Blindfold</em> will only affect retweets. You will still see promoted tweets, quote tweets and cards.</small></p>
       </div>
     </div>
 
@@ -64,14 +84,24 @@
     <script>
       /* global Vue */
       /* eslint indent: 0 */
-      Vue.component('btn-progress', {
-        props: ['activity', 'label', 'css', 'disabled'],
+      Vue.component('btn', {
+        props: ['label', 'css', 'disabled'],
         template: '<button :class="css" :disabled="disabled" @click="btnClick"><span v-show="!activity" class="db mv1">{{ label }}</span><span class="spinner" v-show="activity"><span class="double-bounce1"></span><span class="double-bounce2"></span></span></button>',
         methods: {
           btnClick: function () {
             this.$emit('click');
           }
         }
+      });
+
+      Vue.component('btn-progress', {
+        props: ['css'],
+        template: '<div :class="css"><span class="spinner"><span class="double-bounce1"></span><span class="double-bounce2"></span></span></div>'
+      });
+
+      Vue.component('btn-done', {
+        props: ['css', 'color'],
+        template: '<div :class="css"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" class="v-mid" viewBox="-0.073 -50.757 30.146 23.818" :fill="color"><path d="M29.824-45.249a.628.628 0 0 0 0-.894l-4.38-4.38a.656.656 0 0 0-.893 0L11.25-37.192l-5.8-5.83a.656.656 0 0 0-.894 0l-4.38 4.38a.628.628 0 0 0 0 .894l10.62 10.635c.146.102.278.176.454.176s.308-.074.454-.176zm0 0"/></svg></div>'
       });
 
       Vue.component('err-msg', {
@@ -87,32 +117,20 @@
       var app = new Vue({
         el: '#app',
         data: {
-          rtBlocked: null,
-          following: null,
-          isAnomaly: false,
-          isActiveOn: false,
-          isActiveOff: false,
           isProcessing: false,
+          offState: 'default',
+          onState: 'default',
           errors: []
-        },
-        computed: {
-          isMaxBlocked: function () {
-            if (this.rtBlocked >= this.following) {
-              this.isAnomaly = false;
-              return 'hidden';
-            } else if (this.rtBlocked === 0) {
-              this.isAnomaly = false;
-              return 'visible';
-            } else {
-              this.isAnomaly = true;
-              return 'visible';
-            }
-          }
         },
         methods: {
           updateFriendship: function (wantRetweets) {
             var _self = this;
             _self.isProcessing = true;
+            if (wantRetweets) {
+              _self.onState = 'active';
+            } else {
+              _self.offState = 'active';
+            }
             fetch('/friends', {
               method: 'POST',
               body: JSON.stringify({
@@ -126,40 +144,29 @@
             }).then(function (json) {
               if (json.errors) {
                 _self.errors = json.errors;
-              } else {
-                _self.rtBlocked = json.retweeters_blocked.count;
               }
-              _self.isActiveOff = false;
-              _self.isActiveOn = false;
+
+              if (wantRetweets) {
+                _self.onState = 'complete';
+              } else {
+                _self.offState = 'complete';
+              }
+
               _self.isProcessing = false;
             });
           },
           silenceTheLambs: function (ev) {
-            this.isActiveOff = true;
             this.updateFriendship(false);
           },
           releaseTheKraken: function (ev) {
-            this.isActiveOn = true;
             this.updateFriendship(true);
           },
           clearErrors: function () {
             this.errors = [];
+          },
+          resetControls: function () {
+
           }
-        },
-        mounted: function () {
-          var _self = this;
-          _self.$nextTick(function () {
-            fetch('/friends').then(function (response) {
-              return response.json();
-            }).then(function (json) {
-              if (json.errors) {
-                _self.errors = json.errors;
-              } else {
-                _self.rtBlocked = json.retweeters_blocked.count;
-                _self.following = json.following.length;
-              }
-            });
-          });
         }
       });
     </script>
