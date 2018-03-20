@@ -9,7 +9,7 @@
   line-height: 1.25;
   font-family: $font-family;
   box-shadow:
-    0 1px 3px 0 rgba(0,0,0,0.15),
+    0 1px 4px 0 rgba(0,0,0,0.15),
     inset 0 -1px 0 0 rgba(0,0,0,0.15),
     inset 0 1px 0 0 rgba(255,255,255,0.1);
   border-radius: 4px;
@@ -17,7 +17,7 @@
   border-width: 0;
   border-style: solid;
   background-color: transparent;
-  transition: background-color 0.2s cubic-bezier(0,.35,.76,.58);
+  transition: background-color 0.125s cubic-bezier(0,.35,.76,.58);
 
   &[disabled] {
     opacity: 0.4; 
@@ -38,27 +38,27 @@
   &:hover {
     background-color: lighten($brand-primary, 5%);
     transition:
-      0.15s background-color ease-in;
+      0.125s background-color ease-in;
   }
 }
 
 .btn-secondary {
-  color: $brand-primary;
+  color: $grey-dark;
   font-weight: bold;
   letter-spacing: 1px;
   text-transform: uppercase;
   border-width: 1px;
-  border-color: $brand-primary;
+  border-color: $grey-lighter;
+  background-color: $white;
   box-shadow:
-    0 1px 3px 0 rgba(0,0,0,0.1),
-    // inset 0 -1px 0 0 rgba(0,0,0,0.1),
-    inset 0 1px 0 0 rgba(255,255,255,0.1);
+    0 1px 2px 0 rgba(0,0,0,0.1),
+    inset 0 1px 0 0 rgba(255,255,255,0.25);
+  transition:
+    0.125s color ease-in,
+    0.125s border-color ease-in;
 
   &:hover {
-    border-color: darken($brand-primary, 15%);
-    color: darken($brand-primary, 15%);
-    transition:
-      0.15s color ease-in,
-      0.15s border-color ease-in;
+    color: $grey-darker;
+    border-color: $grey-light;
   }
 }

@@ -13,7 +13,7 @@ body {
   text-rendering: optimizeLegibility;
   font-feature-settings: "liga", "clig";
   font-variant-ligatures: common-ligatures;
-  background-color: $white;
+  background-color: $body-bg;
 }
 
 h1, .h1 {
@@ -111,10 +111,19 @@ small {
   }
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .275s;
+.rotate-enter-active, .rotate-leave-active {
+  transform-style: preserve-3d;
+  transition: all 1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  perspective: 300px;
 }
 
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.rotate-enter, .rotate-leave-to {
+  transform: rotateX(90deg);
   opacity: 0;
 }
+
+.rotate-enter-to, .rotate-leave {
+  transform: rotateX(0deg);
+  opacity: 1;
+}
+
