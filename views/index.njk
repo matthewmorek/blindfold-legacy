@@ -28,43 +28,43 @@
       <div class="w-100 pv3 pv4-m">        
         <h3 class="lh-title tc mv2">Tailor your Twitter feed:</h3>
         <div class="tc mv4 flex-ns justify-between items-center">
-          <transition name="rotate" mode="out-in">
+          <transition name="flip" mode="out-in">
             <btn
               css="btn btn-primary set"
               label="Hide retweets"
-              :disabled="isProcessing"
-              v-if="offState === 'default'"
+              :disabled="isProcessing || on.active"
+              v-if="off.mode === 'default'"
               @click="silenceTheLambs">
             </btn>
             <btn-progress
-              css="btn btn-primary set"
-              v-if="offState === 'active'">
+              css="btn btn-flat set"
+              v-if="off.mode === 'active'">
             </btn-progress>
             <btn-done
-              css="btn btn-primary set"
-              color="#fff"
-              v-if="offState === 'complete'">
+              css="btn btn-flat set"
+              color="#1da1f2"
+              v-if="off.mode === 'complete'">
             </btn-done>
           </transition>
 
           <span class="f7 light-silver ttu tracked tc pa3 db">or</span>
-          
-          <transition name="rotate" mode="out-in">
+            
+          <transition name="flip" mode="out-in">
             <btn
               css="btn btn-secondary set"
               label="Show retweets"
-              :disabled="isProcessing"
-              v-if="onState === 'default'"
+              :disabled="isProcessing || off.active"
+              v-if="on.mode === 'default'"
               @click="releaseTheKraken">
             </btn>
             <btn-progress
-              css="btn btn-secondary set"
-              v-if="onState === 'active'">
+              css="btn btn-flat set"
+              v-if="on.mode === 'active'">
             </btn-progress>
             <btn-done
-              css="btn btn-secondary set"
+              css="btn btn-flat set"
               color="#1da1f2"
-              v-if="onState === 'complete'">
+              v-if="on.mode === 'complete'">
             </btn-done>
           </transition>
         </div>
@@ -96,12 +96,12 @@
 
       Vue.component('btn-progress', {
         props: ['css'],
-        template: '<div :class="css"><span class="spinner"><span class="double-bounce1"></span><span class="double-bounce2"></span></span></div>'
+        template: '<button :class="css"><span class="spinner"><span class="double-bounce1"></span><span class="double-bounce2"></span></span></button>'
       });
 
       Vue.component('btn-done', {
         props: ['css', 'color'],
-        template: '<div :class="css"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" class="v-mid" viewBox="-0.073 -50.757 30.146 23.818" :fill="color"><path d="M29.824-45.249a.628.628 0 0 0 0-.894l-4.38-4.38a.656.656 0 0 0-.893 0L11.25-37.192l-5.8-5.83a.656.656 0 0 0-.894 0l-4.38 4.38a.628.628 0 0 0 0 .894l10.62 10.635c.146.102.278.176.454.176s.308-.074.454-.176zm0 0"/></svg></div>'
+        template: '<button :class="css"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" class="v-mid" viewBox="-0.073 -50.757 30.146 23.818" :fill="color"><path d="M29.824-45.249a.628.628 0 0 0 0-.894l-4.38-4.38a.656.656 0 0 0-.893 0L11.25-37.192l-5.8-5.83a.656.656 0 0 0-.894 0l-4.38 4.38a.628.628 0 0 0 0 .894l10.62 10.635c.146.102.278.176.454.176s.308-.074.454-.176zm0 0"/></svg></button>'
       });
 
       Vue.component('err-msg', {
@@ -118,8 +118,14 @@
         el: '#app',
         data: {
           isProcessing: false,
-          offState: 'default',
-          onState: 'default',
+          on: {
+            mode: 'default',
+            active: false
+          },
+          off: {
+            mode: 'default',
+            active: false
+          },
           errors: []
         },
         methods: {
@@ -127,9 +133,11 @@
             var _self = this;
             _self.isProcessing = true;
             if (wantRetweets) {
-              _self.onState = 'active';
+              _self.on.active = true;
+              _self.on.mode = 'active';
             } else {
-              _self.offState = 'active';
+              _self.off.active = true;
+              _self.off.mode = 'active';
             }
             fetch('/friends', {
               method: 'POST',
@@ -147,10 +155,17 @@
               }
 
               if (wantRetweets) {
-                _self.onState = 'complete';
+                _self.on.mode = 'complete';
               } else {
-                _self.offState = 'complete';
+                _self.off.mode = 'complete';
               }
+
+              setTimeout(function () {
+                _self.on.mode = 'default';
+                _self.off.mode = 'default';
+                _self.on.active = false;
+                _self.off.active = false;
+              }, 2500);
 
               _self.isProcessing = false;
             });
