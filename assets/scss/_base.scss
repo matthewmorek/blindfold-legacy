@@ -111,19 +111,25 @@ small {
   }
 }
 
-.rotate-enter-active, .rotate-leave-active {
-  transform-style: preserve-3d;
-  transition: all 1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-  perspective: 300px;
+.flip-enter-active {
+  perspective: 1000;
+  animation: flipIn 0.5s;
 }
 
-.rotate-enter, .rotate-leave-to {
-  transform: rotateX(90deg);
-  opacity: 0;
+@keyframes flipIn {
+  0% {
+    transform: perspective(400px) rotateX(90deg);
+  }
+  
+  40% {
+    transform: perspective(400px) rotateX(-10deg);
+  }
+  
+  70% {
+    transform: perspective(400px) rotateX(10deg);
+  }
+  
+  100% {
+    transform: perspective(400px) rotateX(0deg);
+  }
 }
-
-.rotate-enter-to, .rotate-leave {
-  transform: rotateX(0deg);
-  opacity: 1;
-}
-
