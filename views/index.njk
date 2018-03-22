@@ -86,7 +86,7 @@
       /* eslint indent: 0 */
       Vue.component('btn', {
         props: ['label', 'css', 'disabled'],
-        template: '<button :class="css" :disabled="disabled" @click="btnClick"><span v-show="!activity" class="db mv1">{{ label }}</span><span class="spinner" v-show="activity"><span class="double-bounce1"></span><span class="double-bounce2"></span></span></button>',
+        template: '<button :class="css" :disabled="disabled" @click="btnClick"><span class="db mv1">{{ label }}</span></button>',
         methods: {
           btnClick: function () {
             this.$emit('click');
