@@ -17,7 +17,6 @@
   border-width: 0;
   border-style: solid;
   background-color: transparent;
-  transition: background-color 0.125s cubic-bezier(0,.35,.76,.58);
 
   &[disabled] {
     opacity: 0.4; 
@@ -34,11 +33,11 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   background-color: $brand-primary;
+  transition:
+    0.125s background-color ease-in;
 
   &:hover {
     background-color: lighten($brand-primary, 5%);
-    transition:
-      0.125s background-color ease-in;
   }
 }
 
@@ -61,4 +60,15 @@
     color: $grey-darker;
     border-color: $grey-light;
   }
+}
+
+.btn-flat {
+  color: $grey-dark;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-width: 1px;
+  border-color: $grey-lighter;
+  background-color: $white;
+  box-shadow: none;
 }
