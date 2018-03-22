@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="{{ meta.language }}">
+<html lang="{{ meta.language }}" class="bg-near-white">
   {% include "partials/head.njk" %}
 
-  <body id="body" class="mw6 relative ml-auto mr-auto flex flex-column justify-center min-vh-100">
-    {% include "partials/header.njk" %}
+  <body id="body" class="mw7 relative ml-auto mr-auto flex flex-column justify-center min-vh-100">
+    <div class="shadow bg-white pv3-ns br1">
+      {% include "partials/header.njk" %}
 
-    {% block body %}
-    <main class="pa3 pa4-m mw6 ml-auto mr-auto tc">
-      <h1 class="lh-title mv2">Page not found</h1>
-      <p>We're sorry, but the page you requested cannot be found</p>
-    </main>
-    {% endblock %}
+      {% block body %}
+      <main class="pa3 pa4-m mw6 ml-auto mr-auto tc">
+        <h1 class="lh-title mv2">Page not found</h1>
+        <p>We're sorry, but the page you requested cannot be found</p>
+      </main>
+      {% endblock %}
 
-    {% include "../partials/footer.njk" %}
+      {% include "../partials/footer.njk" %}
+    </div>
     
     {% if user %}
       <script src="{{ base_url }}/js/bundle.js"></script>

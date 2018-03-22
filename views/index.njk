@@ -5,17 +5,17 @@
 {% extends "layouts/main.njk" %}
 
 {% block body %}
-<main class="pa3 ph0-l">
+<main class="ph3 ph0-l mw6 ml-auto mr-auto">
   {% if not user %}
-  <div class="content">
-    <h2 class="f3 tc">Turn off retweets from the people you follow.</h2>
+  <div class="content pa3-m pv4-l">
+    <h2 class="f3 tc mv3 ph4-m">Turn off your retweets. All at once.</h2>
     <p>Not seeing retweets in your feed helps your mind stay free of all the negativity that they usually amplify.</p>
-    <p><em>The Atlantic</em> made a great <a href="https://www.theatlantic.com/magazine/archive/2018/04/the-case-against-retweets/554078/">case for turning off your retweets</a> and you should give it a read.</p>
-    <p>As it would normally be a laborious task, I built <em>Blindfold</em> to do it for you. Oh, and you can <em>always</em> revert back.</p>
+    <p>The Atlantic made a great <a href="https://www.theatlantic.com/magazine/archive/2018/04/the-case-against-retweets/554078/">case for turning off your retweets</a> and you should give it a read, if you value your mental wellbeing.</p>
+    <p>As it would normally be a laborious task, I built Blindfold to turn off retweets for you. Oh, and you can always revert back.</p>
     <p class="mv4">
       <a href="{{ base_url }}/auth" class="btn btn-primary db">Sign in with Twitter</a>
     </p>
-    <p class="lh-title tc"><small>This service is <em>free</em>. You will have to confirm your intention after signing in with <em>Twitter</em>.</small></p>
+    <p class="lh-title tc ph4-m"><small>This service is free. You will have to confirm your intention after signing in with Twitter.</small></p>
   </div>
   {% else %}
     {% verbatim %}
@@ -26,7 +26,7 @@
       </transition>
 
       <div class="w-100 pv3 pv4-m">        
-        <h3 class="lh-title tc mv2">Tailor your Twitter feed:</h3>
+        <h3 class="lh-title tc mv3">Tailor your Twitter feed:</h3>
         <div class="tc mv4 flex-ns justify-between items-center">
           <transition name="flip" mode="out-in">
             <btn
@@ -69,7 +69,7 @@
           </transition>
         </div>
 
-        <p class="lh-title tc ph5-m"><small>Using <em>Blindfold</em> will only affect retweets. You will still see promoted tweets, quote tweets and cards.</small></p>
+        <p class="lh-title tc ph5-m pb0"><small>Using this tool will only affect retweets. You will still see promoted tweets, quote tweets and cards.</small></p>
       </div>
     </div>
 

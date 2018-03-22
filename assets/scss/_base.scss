@@ -2,6 +2,7 @@
 
 html {
   height: 100%;
+  background-color: $body-bg;
 }
 
 html,
@@ -13,7 +14,6 @@ body {
   text-rendering: optimizeLegibility;
   font-feature-settings: "liga", "clig";
   font-variant-ligatures: common-ligatures;
-  background-color: $body-bg;
 }
 
 h1, .h1 {
@@ -111,9 +111,15 @@ small {
   }
 }
 
+.shadow {
+  // @include mq($sm) {
+    box-shadow: rgba($black, 0.1) 0 8px 16px;
+  // }
+}
+
 .flip-enter-active {
   perspective: 1000;
-  animation: flipIn 0.5s;
+  animation: flipIn 0.75s;
 }
 
 @keyframes flipIn {
