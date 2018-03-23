@@ -27,6 +27,6 @@ app.listen(config.port, function () {
       open: false
     });
   } else {
-    console.log('Listening on http://' + config.site_host + ':' + config.port);
+    console.log('Listening on http://' + config.bind_host + ':' + config.port);
   }
 });

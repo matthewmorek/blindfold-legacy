@@ -10,6 +10,7 @@ class Config {
     this.server_cache = process.env.SERVER_CACHE || true;
     this.server_watch = process.env.SERVER_WATCH || false;
     this.site_host = process.env.SITE_HOST || '127.0.0.1';
+    this.bind_host = process.env.BIND_HOST || '127.0.0.1';
   }
 }
 
