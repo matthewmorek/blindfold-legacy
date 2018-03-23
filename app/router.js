@@ -41,8 +41,8 @@ module.exports.init = (app, config) => {
     },
     function (token, tokenSecret, profile, cb) {
       return cb(null, profile, {
-        consumer_key: 'KKI0G62PzImVqbJJTo62DJCrI',
-        consumer_secret: 'v7ctyWhI5Kd4SiIoXrDQBXl9dHHnVcsa0JusUKQ2fflcbVXfbT',
+        consumer_key: config.app_key,
+        consumer_secret: config.app_secret,
         access_token_key: token,
         access_token_secret: tokenSecret
       });
