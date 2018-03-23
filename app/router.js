@@ -37,7 +37,7 @@ module.exports.init = (app, config) => {
     {
       consumerKey: config.app_key,
       consumerSecret: config.app_secret,
-      callbackURL: 'http://' + config.site_host + (config.env === 'production' ? ':' + config.port : '') + '/auth/callback'
+      callbackURL: 'http://' + config.site_host + (config.env !== 'production' ? ':' + config.port : '') + '/auth/callback'
     },
     function (token, tokenSecret, profile, cb) {
       return cb(null, profile, {
