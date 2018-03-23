@@ -93,6 +93,10 @@ module.exports.init = (app, config) => {
     };
     context.user = req.session.user;
 
+    if (config.gs_app_id) {
+      context.gs_app_id = config.gs_app_id;
+    }
+
     if (req.session.auth) {
       _twitter = new Twitter(req.session.auth);
     }
