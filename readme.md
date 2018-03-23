@@ -1,3 +1,5 @@
+<p align="center"><img src="https://github.com/matthewmorek/blindfold/raw/master/public/images/og-image.png" srcset="https://github.com/matthewmorek/blindfold/raw/master/public/images/og-image@2x.png 2x" alt="blindfold banner" /></p>
+
 # Blindfold
 _Blindfold_ is a small web app built in Node.js that allows you to turn off/on retweets from the people you follow on Twitter. Because life is too short to keep ingesting negative crap all the time.
 
