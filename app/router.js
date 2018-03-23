@@ -35,9 +35,9 @@ module.exports.init = (app, config) => {
 
   passport.use(new TwitterStrategy(
     {
-      consumerKey: 'KKI0G62PzImVqbJJTo62DJCrI',
-      consumerSecret: 'v7ctyWhI5Kd4SiIoXrDQBXl9dHHnVcsa0JusUKQ2fflcbVXfbT',
-      callbackURL: (config.env === 'production' ? 'http://' + config.site_host + '/auth/callback' : 'http://' + config.site_host + ':' + config.port + '/auth/callback')
+      consumerKey: config.app_key,
+      consumerSecret: config.app_secret,
+      callbackURL: 'http://' + config.site_host + (config.env === 'production' ? ':' + config.port : '') + '/auth/callback'
     },
     function (token, tokenSecret, profile, cb) {
       return cb(null, profile, {

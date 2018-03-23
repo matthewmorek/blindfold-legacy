@@ -11,6 +11,8 @@ class Config {
     this.server_watch = process.env.SERVER_WATCH || false;
     this.site_host = process.env.SITE_HOST || '127.0.0.1';
     this.bind_host = process.env.BIND_HOST || '127.0.0.1';
+    this.app_key = process.env.APP_KEY || false;
+    this.app_secret = process.env.APP_SECRET || false;
   }
 }
 
