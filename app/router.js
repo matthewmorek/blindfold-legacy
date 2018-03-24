@@ -23,7 +23,7 @@ module.exports.init = (app, config) => {
   var _limit = promiseLimit(25);
   var _templates = path.join(__dirname, './../views');
   var _session = {
-    secret: 'fire @jack'
+    secret: config.salt
   };
 
   nunjucks.configure(_templates, {
