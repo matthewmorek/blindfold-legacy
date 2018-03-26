@@ -13,8 +13,10 @@ class Config {
     this.bind_host = process.env.BIND_HOST || '127.0.0.1';
     this.app_key = process.env.APP_KEY || false;
     this.app_secret = process.env.APP_SECRET || false;
-    this.gs_app_id = process.env.GS_APP_ID || false;
     this.salt = process.env.SALT || null;
+    // These are optional, for 3rd-party integrations
+    this.gs_app_id = process.env.GS_APP_ID || false;
+    this.bs_key = process.env.BS_KEY || false;
   }
 }
 

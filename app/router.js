@@ -17,6 +17,7 @@ const cacheMiddleware = cache.middleware;
 const passport = require('passport');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const Twitter = require('twitter');
+const bugsnag = require('bugsnag');
 
 module.exports.init = (app, config) => {
   var _twitter;
@@ -25,6 +26,12 @@ module.exports.init = (app, config) => {
   var _session = {
     secret: config.salt
   };
+
+  var isProduction = function () {
+    return (config.env === 'production' ? true : false);
+  };
+
+  bugsnag.register(config.bs_key);
 
   nunjucks.configure(_templates, {
     autoescape: true,
@@ -61,7 +68,8 @@ module.exports.init = (app, config) => {
   app.set('view engine', 'njk');
   app.set('views', _templates);
 
-  app.use(logger('dev'));
+  app.use(bugsnag.requestHandler)
+  // app.use(logger('dev'));
   app.use(helmet());
   app.enable('trust proxy', 1);
   app.use(express.static(path.join(__dirname, './../public'), { index: false }));
@@ -110,7 +118,10 @@ module.exports.init = (app, config) => {
   // Process Twitter callback and verify authentication
   app.get('/auth/callback', function (req, res, next) {
     passport.authenticate('twitter', { session: false }, function (err, user, info, status) {
-      if (err) { return next(err); }
+      if (err) {
+        bugsnag.notify(new Error('Problem authenticating with Twitter API'), { errors: err });
+        return next(err);
+      }
       if (!user) { return res.redirect('/404'); }
       req.session.auth = info;
       req.session.user = {
@@ -123,10 +134,6 @@ module.exports.init = (app, config) => {
     })(req, res, next);
   });
 
-  var isProduction = function () {
-    return (config.env === 'production' ? true : false);
-  };
-
   // Fetch data about friendships from the API
   app.get('/friends', cacheMiddleware('5 minutes', isProduction), function (req, res, next) {
     req.apicacheGroup = 'friends';
@@ -135,13 +142,13 @@ module.exports.init = (app, config) => {
     // Fetch number of retweeters blocked
     _twitter.get('friendships/no_retweets/ids', function (errors, response) {
       if (errors) {
+        bugsnag.notify(new Error('Problem getting `no_retweets` ids'), { errors: errors });
         res.json({errors: errors});
       } else {
         var retweeters_blocked = {
           count: response.length,
           ids: response
         };
-        console.log({ retweeters_blocked: response.length });
         res.payload.retweeters_blocked = retweeters_blocked;
         next();
       }
@@ -150,6 +157,7 @@ module.exports.init = (app, config) => {
     // Fetch number of friends (people you follow)
     _twitter.get('friends/ids', { stringify_ids: true }, function (errors, response) {
       if (errors) {
+        bugsnag.notify(new Error('Problem getting friends/ids'), { errors: errors });
         res.json({errors: errors});
       } else {
         res.payload.following = response.ids;
@@ -165,6 +173,7 @@ module.exports.init = (app, config) => {
       res.following = response.ids;
       next();
     }).catch(function (errors) {
+      bugsnag.notify(new Error('Problem getting friends/ids'), { errors: errors });
       res.json({errors: errors});
     });
   }, function (req, res, next) {
@@ -179,22 +188,23 @@ module.exports.init = (app, config) => {
         }).then(function (response) {
           count += 1;
         }).catch(function (errors) {
-          res.json({errors: errors});
+          bugsnag.notify(new Error('Problem with posting and update to Twitter API'), { errors: errors });
+          next(errors);
         });
       });
     })).then(function (data) {
-      console.log({ count: count });
       next();
     }).catch(function (errors) {
+      bugsnag.notify(new Error(errors));
       res.json({errors: errors});
     });
   }, function (req, res) {
     _twitter.get('friendships/no_retweets/ids', function (errors, response) {
       if (errors) {
+        bugsnag.notify(new Error('Problem getting `no_retweets` ids'), { errors: errors });
         res.json({errors: errors});
       } else {
         cache.clear('friends');
-        console.log({ retweeters_blocked: response.length });
         res.json({
           retweeters_blocked: {
             count: response.length,
