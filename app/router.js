@@ -68,7 +68,7 @@ module.exports.init = (app, config) => {
   app.set('view engine', 'njk');
   app.set('views', _templates);
 
-  app.use(bugsnag.requestHandler)
+  app.use(bugsnag.requestHandler);
   // app.use(logger('dev'));
   app.use(helmet());
   app.enable('trust proxy', 1);
@@ -145,11 +145,11 @@ module.exports.init = (app, config) => {
         bugsnag.notify(new Error('Problem getting `no_retweets` ids'), { errors: errors });
         res.json({errors: errors});
       } else {
-        var retweeters_blocked = {
+        var retweetersBlocked = {
           count: response.length,
           ids: response
         };
-        res.payload.retweeters_blocked = retweeters_blocked;
+        res.payload.retweeters_blocked = retweetersBlocked;
         next();
       }
     });
