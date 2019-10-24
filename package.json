@@ -2,13 +2,8 @@
   "name": "blindfold",
   "version": "0.1.0",
   "description": "Disable retweets from people you follow, all at once.",
-  "main": "server.js",
+  "main": "src/index.js",
   "scripts": {
-    "clean": "grunt clean",
-    "build": "grunt build",
-    "dist": "grunt dist",
-    "watch": "grunt watch",
-    "start": "node ./app/index.js"
   },
   "author": "Matthew Morek (matthewmorek@me.com)",
   "license": "MIT",
