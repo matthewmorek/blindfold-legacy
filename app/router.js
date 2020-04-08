@@ -38,27 +38,33 @@ module.exports.init = (app, config) => {
     express: app
   });
 
-  passport.use(new TwitterStrategy(
-    {
-      consumerKey: config.app_key,
-      consumerSecret: config.app_secret,
-      callbackURL: 'https://' + config.site_host + (config.env !== 'production' ? ':' + config.port : '') + '/auth/callback'
-    },
-    function (token, tokenSecret, profile, cb) {
-      return cb(null, profile, {
-        consumer_key: config.app_key,
-        consumer_secret: config.app_secret,
-        access_token_key: token,
-        access_token_secret: tokenSecret
-      });
-    }
-  ));
+  passport.use(
+    new TwitterStrategy(
+      {
+        consumerKey: config.app_key,
+        consumerSecret: config.app_secret,
+        callbackURL:
+          (config.env !== 'production' ? 'http://' : 'https://') +
+          config.site_host +
+          (config.env !== 'production' ? ':' + config.port : '') +
+          '/auth/callback'
+      },
+      function(token, tokenSecret, profile, cb) {
+        return cb(null, profile, {
+          consumer_key: config.app_key,
+          consumer_secret: config.app_secret,
+          access_token_key: token,
+          access_token_secret: tokenSecret
+        });
+      }
+    )
+  );
 
-  passport.serializeUser(function (user, cb) {
+  passport.serializeUser(function(user, cb) {
     cb(null, user);
   });
 
-  passport.deserializeUser(function (obj, cb) {
+  passport.deserializeUser(function(obj, cb) {
     cb(null, obj);
   });
 
@@ -78,7 +84,9 @@ module.exports.init = (app, config) => {
   // app.use(logger('dev'));
   app.use(helmet());
   app.enable('trust proxy', 1);
-  app.use(express.static(path.join(__dirname, './../public'), { index: false }));
+  app.use(
+    express.static(path.join(__dirname, './../public'), { index: false })
+  );
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(sanitizer());
@@ -87,7 +95,7 @@ module.exports.init = (app, config) => {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.get('/', function (req, res) {
+  app.get('/', function(req, res) {
     var context = {};
     // define basic context for the templates
     context.base_url = req.protocol + '://' + req.get('host');
@@ -122,13 +130,22 @@ module.exports.init = (app, config) => {
   app.get('/auth', passport.authenticate('twitter'));
 
   // Process Twitter callback and verify authentication
-  app.get('/auth/callback', function (req, res, next) {
-    passport.authenticate('twitter', { session: false }, function (err, user, info, status) {
+  app.get('/auth/callback', function(req, res, next) {
+    passport.authenticate('twitter', { session: true }, function(
+      err,
+      user,
+      info,
+      status
+    ) {
       if (err) {
-        bugsnag.notify(new Error('Problem authenticating with Twitter API'), { errors: err });
+        bugsnag.notify(new Error('Problem authenticating with Twitter API'), {
+          errors: err
+        });
         return next(err);
       }
-      if (!user) { return res.redirect('/404'); }
+      if (!user) {
+        return res.redirect('/404');
+      }
       req.session.auth = info;
       req.session.user = {
         id: user.id,
@@ -141,84 +158,120 @@ module.exports.init = (app, config) => {
   });
 
   // Fetch data about friendships from the API
-  app.get('/friends', cacheMiddleware('5 minutes', isProduction), function (req, res, next) {
-    req.apicacheGroup = 'friends';
-    // Define a payload response object
-    res.payload = {};
-    // Fetch number of retweeters blocked
-    _twitter.get('friendships/no_retweets/ids', function (errors, response) {
-      if (errors) {
-        bugsnag.notify(new Error('Problem getting `no_retweets` ids'), { errors: errors });
-        res.json({errors: errors});
-      } else {
-        var retweetersBlocked = {
-          count: response.length,
-          ids: response
-        };
-        res.payload.retweeters_blocked = retweetersBlocked;
-        next();
-      }
-    });
-  }, function (req, res, next) {
-    // Fetch number of friends (people you follow)
-    _twitter.get('friends/ids', { stringify_ids: true }, function (errors, response) {
-      if (errors) {
-        bugsnag.notify(new Error('Problem getting friends/ids'), { errors: errors });
-        res.json({errors: errors});
-      } else {
-        res.payload.following = response.ids;
-        next();
-      }
-    });
-  }, function (req, res) {
-    res.json(res.payload);
-  });
-
-  app.post('/friends', function (req, res, next) {
-    _twitter.get('friends/ids', { stringify_ids: true }).then(function (response) {
-      res.following = response.ids;
-      next();
-    }).catch(function (errors) {
-      bugsnag.notify(new Error('Problem getting friends/ids'), { errors: errors });
-      res.json({errors: errors});
-    });
-  }, function (req, res, next) {
-    var following = res.following;
-    var count = 0;
-
-    Promise.all(following.map(function (id) {
-      return _limit(function () {
-        return _twitter.post('friendships/update', {
-          user_id: id,
-          retweets: req.body.want_retweets
-        }).then(function (response) {
-          count += 1;
-        }).catch(function (errors) {
-          bugsnag.notify(new Error('Problem with posting and update to Twitter API'), { errors: errors });
-          next(errors);
-        });
-      });
-    })).then(function (data) {
-      next();
-    }).catch(function (errors) {
-      bugsnag.notify(new Error(errors));
-      res.json({errors: errors});
-    });
-  }, function (req, res) {
-    _twitter.get('friendships/no_retweets/ids', function (errors, response) {
-      if (errors) {
-        bugsnag.notify(new Error('Problem getting `no_retweets` ids'), { errors: errors });
-        res.json({errors: errors});
-      } else {
-        cache.clear('friends');
-        res.json({
-          retweeters_blocked: {
+  app.get(
+    '/friends',
+    cacheMiddleware('5 minutes', isProduction),
+    function(req, res, next) {
+      req.apicacheGroup = 'friends';
+      // Define a payload response object
+      res.payload = {};
+      // Fetch number of retweeters blocked
+      _twitter.get('friendships/no_retweets/ids', function(errors, response) {
+        if (errors) {
+          bugsnag.notify(new Error('Problem getting `no_retweets` ids'), {
+            errors: errors
+          });
+          res.json({ errors: errors });
+        } else {
+          var retweetersBlocked = {
             count: response.length,
             ids: response
-          }
+          };
+          res.payload.retweeters_blocked = retweetersBlocked;
+          next();
+        }
+      });
+    },
+    function(req, res, next) {
+      // Fetch number of friends (people you follow)
+      _twitter.get('friends/ids', { stringify_ids: true }, function(
+        errors,
+        response
+      ) {
+        if (errors) {
+          bugsnag.notify(new Error('Problem getting friends/ids'), {
+            errors: errors
+          });
+          res.json({ errors: errors });
+        } else {
+          res.payload.following = response.ids;
+          next();
+        }
+      });
+    },
+    function(req, res) {
+      res.json(res.payload);
+    }
+  );
+
+  app.post(
+    '/friends',
+    function(req, res, next) {
+      _twitter
+        .get('friends/ids', { stringify_ids: true })
+        .then(function(response) {
+          res.following = response.ids;
+          next();
+        })
+        .catch(function(errors) {
+          bugsnagClient.notify(new Error('Problem getting friends/ids'), {
+            errors: errors
+          });
+          res.json({ errors: errors });
         });
-      }
-    });
-  });
+    },
+    function(req, res, next) {
+      var following = res.following;
+      var count = 0;
+
+      Promise.all(
+        following.map(function(id) {
+          return _limit(function() {
+            return _twitter
+              .post('friendships/update', {
+                user_id: id,
+                retweets: req.body.want_retweets
+              })
+              .then(function(response) {
+                count += 1;
+              })
+              .catch(function(errors) {
+                bugsnagClient.notify(
+                  new Error('Problem with posting and update to Twitter API'),
+                  { errors: errors }
+                );
+                next(errors);
+              });
+          });
+        })
+      )
+        .then(function(data) {
+          next();
+        })
+        .catch(function(errors) {
+          // bugsnagClient.notify(new Error(errors));
+          res.json({ errors: errors });
+        });
+    },
+    function(req, res) {
+      _twitter.get('friendships/no_retweets/ids', function(errors, response) {
+        if (errors) {
+          bugsnagClient.notify(new Error('Problem getting `no_retweets` ids'), {
+            errors: errors
+          });
+          res.json({ errors: errors });
+        } else {
+          cache.clear('friends');
+          res.json({
+            retweeters_blocked: {
+              count: response.length,
+              ids: response
+            }
+          });
+        }
+      });
+    }
+  );
+
   app.use(middleware.errorHandler);
 };
