@@ -1,20 +1,4 @@
-import Vue from 'vue';
-import VueWait from 'vue-wait';
-import App from './App.vue';
-import './registerServiceWorker';
-import bugsnagVue from '@bugsnag/plugin-vue';
-import bugsnagClient from './utilities/bugsnag';
+import Vue from '../node_modules/vue/dist/vue.esm.js';
+import 'whatwg-fetch';
 
-bugsnagClient.use(bugsnagVue, Vue);
-
-Vue.use(VueWait);
-
-Vue.config.productionTip = false;
-
-new Vue({
-  store,
-  wait: new VueWait({
-    useVuex: false
-  }),
-  render: h => h(App)
-}).$mount('#app');
+window.Vue = Vue;
