@@ -17,7 +17,8 @@ const cacheMiddleware = cache.middleware;
 const passport = require('passport');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const Twitter = require('twitter');
-const bugsnag = require('bugsnag');
+const bugsnag = require('@bugsnag/js');
+const bugsnagExpress = require('@bugsnag/plugin-express');
 
 module.exports.init = (app, config) => {
   var _twitter;
@@ -30,8 +31,6 @@ module.exports.init = (app, config) => {
   var isProduction = function () {
     return (config.env === 'production' ? true : false);
   };
-
-  bugsnag.register(config.bs_key);
 
   nunjucks.configure(_templates, {
     autoescape: true,
@@ -68,7 +67,15 @@ module.exports.init = (app, config) => {
   app.set('view engine', 'njk');
   app.set('views', _templates);
 
-  app.use(bugsnag.requestHandler);
+  const bugsnagClient = bugsnag({
+    apiKey: config.bs_key,
+    appVersion: config.app_version
+  });
+
+  bugsnagClient.use(bugsnagExpress);
+  const middleware = bugsnagClient.getPlugin('express');
+  app.use(middleware.requestHandler);
+
   // app.use(logger('dev'));
   app.use(helmet());
   app.enable('trust proxy', 1);
@@ -214,4 +221,5 @@ module.exports.init = (app, config) => {
       }
     });
   });
+  app.use(middleware.errorHandler);
 };
