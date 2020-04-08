@@ -20,6 +20,8 @@
     "@bugsnag/plugin-express": "^6.5.1",
     "apicache": "^1.5.3",
     "autoprefixer": "^9.7.6",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
     "body-parser": "^1.19.0",
     "cookie-session": "^2.0.0-beta.3",
     "cssnano": "^4.1.10",
@@ -27,6 +29,7 @@
     "envify": "^4.1.0",
     "express": "^4.17.1",
     "express-sanitizer": "^1.0.5",
+    "express-vue": "^5.15.0",
     "helmet": "^3.22.0",
     "morgan": "^1.10.0",
     "nunjucks": "^3.2.1",
@@ -45,6 +48,8 @@
   },
   "devDependencies": {
     "browser-sync": "^2.26.7",
-    "nodemon": "^2.0.2"
+    "eslint-plugin-prettier": "^3.1.2",
+    "nodemon": "^2.0.2",
+    "prettier": "^2.0.4"
   }
 }

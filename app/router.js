@@ -10,6 +10,7 @@ const config = require('./config');
 const path = require('path');
 const helmet = require('helmet');
 const nunjucks = require('nunjucks');
+const expressVue = require('express-vue');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const cache = require('apicache');
@@ -31,12 +32,25 @@ module.exports.init = (app, config) => {
     cookie: { secure: isProduction }
   };
 
-  nunjucks.configure(_templates, {
-    autoescape: true,
-    watch: config.server_watch,
-    cache: config.server_cache,
-    express: app
-  });
+  const vueOptions = {
+    rootPath: _templates,
+    head: {
+      styles: [
+        {
+          style: 'css/global.css'
+        }
+      ]
+    }
+  };
+
+  app.use(expressVue.init(vueOptions));
+
+  // nunjucks.configure(_templates, {
+  //   autoescape: true,
+  //   watch: config.server_watch,
+  //   cache: config.server_cache,
+  //   express: app
+  // });
 
   passport.use(
     new TwitterStrategy(
@@ -68,9 +82,9 @@ module.exports.init = (app, config) => {
     cb(null, obj);
   });
 
-  app.engine('njk', nunjucks.render);
-  app.set('view engine', 'njk');
-  app.set('views', _templates);
+  // app.engine('njk', nunjucks.render);
+  // app.set('view engine', 'njk');
+  // app.set('views', _templates);
 
   const bugsnagClient = bugsnag({
     apiKey: config.bs_key,
@@ -100,30 +114,42 @@ module.exports.init = (app, config) => {
     // define basic context for the templates
     context.base_url = req.protocol + '://' + req.get('host');
     context.page_url = context.base_url + req.path;
-    context.meta = {
-      language: 'en',
-      locale: 'en_GB',
-      author: 'Matthew Morek',
-      title: 'Blindfold',
-      description: 'Turn off retweets from people you follow, all at once.',
-      og_type: 'website',
-      og_image: '/images/og-image.png',
-      twitter: {
-        card: 'summary_large_image',
-        creator: 'matthewmorek'
-      }
-    };
     context.user = req.session.user;
-
-    if (config.gs_app_id) {
-      context.gs_app_id = config.gs_app_id;
-    }
 
     if (req.session.auth) {
       _twitter = new Twitter(req.session.auth);
     }
 
-    res.render('index', context);
+    const data = {
+      otherData: 'Something Else'
+    };
+
+    req.vueOptions = {
+      head: {
+        title: 'Blindfold',
+        metas: [
+          { property: 'language', content: 'en' },
+          { property: 'locale', content: 'en_GB' },
+          { property: 'author', content: 'Matthew Morek' },
+          { property: 'title', content: 'Blindfold' },
+          {
+            property: 'description',
+            content: 'Turn off your retweets. All at once.'
+          },
+          { property: 'og:title', content: 'Blindfold' },
+          {
+            property: 'og:description',
+            content: 'Turn off your retweets. All at once.'
+          },
+          { property: 'og:type', content: 'website' },
+          { property: 'og:image', content: '/images/og-image.png' },
+          { property: 'twitter:card', content: 'summary_large_image' },
+          { property: 'twitter:creator', content: '@matthewmorek' }
+        ]
+      }
+    };
+
+    res.renderVue('App.vue', data, req.vueOptions);
   });
 
   // Initiate authentication with Twitter

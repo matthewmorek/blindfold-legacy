@@ -19,7 +19,7 @@ app.listen(config.port, function() {
     bs.init({
       proxy: config.site_host + ':' + config.port,
       port: 4000,
-      files: ['public/**/*.{js,css}', 'views/**/*.njk'],
+      files: ['public/**/*.{js,css}', 'views/**/*.vue'],
       reloadOnRestart: true,
       open: false
     });
