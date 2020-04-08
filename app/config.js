@@ -2,7 +2,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 
 class Config {
-  constructor () {
+  constructor() {
     this.root = path.normalize(path.join(__dirname, '/..'));
     this.rootPath = process.env.ROOT_PATH || '/';
     this.port = parseInt(process.env.PORT) || 3000;
@@ -13,10 +13,9 @@ class Config {
     this.bind_host = process.env.BIND_HOST || '127.0.0.1';
     this.app_key = process.env.APP_KEY || false;
     this.app_secret = process.env.APP_SECRET || false;
+    this.app_version = require('../package').version;
     this.salt = process.env.SALT || null;
-    // These are optional, for 3rd-party integrations
-    this.gs_app_id = process.env.GS_APP_ID || false;
-    this.bs_key = process.env.BS_KEY || false;
+    this.bs_key = process.env.BS_KEY || null;
   }
 }
 
