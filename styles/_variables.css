@@ -1,0 +1,73 @@
+:root {
+  --font-family: 'Nunito Sans', -apple-system, system-ui, BlinkMacSystemFont,
+    'Segoe UI', Roboto, sans-serif;
+
+  --app-bg: rgb(255, 255, 255);
+  --app-bg-blur: rgba(255, 255, 255, 0.75);
+
+  --color-primary: rgba(255, 255, 255);
+  --color-secondary: #171b21;
+  --color-accent: #9ed5f6;
+  --color-link: #036aa9;
+
+  /* Button */
+  --btn-bg: #efefef;
+  --btn-border: rgba(0, 0, 0, 0);
+  --btn-text: #171b21;
+
+  /* Button -- disabled */
+  --btn-bg--disabled: transparent;
+  --btn-border--disabled: rgba(0, 0, 0, 0.2);
+  --btn-text--disabled: #171b21;
+
+  /* Button: Primary */
+  --btn-primary-bg: #9ed5f6;
+  --btn-border: rgba(0, 0, 0, 0);
+  --btn-primary-text: #171b21;
+
+  /* Button: Primary -- disabled */
+  --btn-primary-bg--disabled: transparent;
+  --btn-primary-border--disabled: rgba(0, 0, 0, 0.2);
+  --btn-primary-text--disabled: #171b21;
+
+  --text-size: 1rem;
+  --text-size-sm: 0.875rem;
+  --text-size-xs: 0.75rem;
+  --text-color: #171b21;
+
+  --icon: #171b21;
+
+  /* @media (prefers-color-scheme: dark) {
+    --app-bg: rgb(0, 0, 0);
+    --app-bg-blur: rgba(0, 0, 0, 0.85);
+
+    --btn-color-bg: #dedede;
+    --btn-color-border: rgb(28, 28, 30);
+    --btn-color-text: rgb(44, 44, 46);
+
+    --btn-color-bg--disabled: transparent;
+    --btn-color-border--disabled: #464646;
+    --btn-color-text--disabled: #1a1a1a;
+
+    --pill-color-bg: #111;
+    --pill-color-text: #dedede;
+
+    --pill-color-bg--due: #ffbb32;
+    --pill-color-text--due: #373737;
+
+    --pill-color-bg--arrived: #c5e6a6;
+    --pill-color-text--arrived: #373737;
+
+    --pill-color-bg--departing: #111;
+    --pill-color-text--departing: #aeaeae;
+
+    --text-color: #dedede;
+    --text-color-dimmed: #a6a5a5;
+
+    --notice-color-bg: #111;
+    --notice-color-text: #a6a5a5;
+
+    --header-color-border: #1a1a1a;
+    --icon-contrast: #dedede;
+  } */
+}

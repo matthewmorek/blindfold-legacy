@@ -1,9 +1,16 @@
 {
   "name": "blindfold",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Disable retweets from people you follow, all at once.",
-  "main": "src/index.js",
+  "main": "app/index.js",
   "scripts": {
+    "dev": "node app/index.js && yarn watch:css && yarn watch:js",
+    "prebuild": "rimraf public/css/ && rimraf public/js/",
+    "build": "yarn build:css && yarn build:js",
+    "build:css": "parcel build styles/global.css --out-dir public/css",
+    "build:js": "parcel build src/main.js --out-dir public/js",
+    "watch:css": "parcel watch styles/global.css --out-dir public/css",
+    "watch:js": "parcel watch src/main.js --out-dir public/js"
   },
   "author": "Matthew Morek (matthewmorek@me.com)",
   "license": "MIT",

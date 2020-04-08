@@ -1,0 +1,58 @@
+html,
+body {
+  font-family: var(--font-family);
+  line-height: 1.4;
+  font-size: var(--text-size);
+  font-weight: 400;
+  color: var(--text-color);
+  background-color: var(--app-bg);
+  min-height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1em;
+
+  & + p {
+    margin-top: 1em;
+  }
+
+  &:only-child {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+ul,
+ol {
+  padding-left: 1.5rem;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+ul {
+  list-style-type: square;
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
