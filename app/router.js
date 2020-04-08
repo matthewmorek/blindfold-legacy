@@ -21,15 +21,14 @@ const bugsnag = require('@bugsnag/js');
 const bugsnagExpress = require('@bugsnag/plugin-express');
 
 module.exports.init = (app, config) => {
+  var isProduction = config.env === 'production' ? true : false;
+
   var _twitter;
   var _limit = promiseLimit(25);
   var _templates = path.join(__dirname, './../views');
   var _session = {
-    secret: config.salt
-  };
-
-  var isProduction = function () {
-    return (config.env === 'production' ? true : false);
+    secret: config.salt,
+    cookie: { secure: isProduction }
   };
 
   nunjucks.configure(_templates, {
