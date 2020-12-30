@@ -33,7 +33,7 @@
     "helmet": "^3.6.1",
     "modularscale-sass": "^3.0.3",
     "morgan": "^1.8.2",
-    "node-sass": "^4.1.1",
+    "node-sass": "^4.13.1",
     "normalize-scss": "^7.0.1",
     "nunjucks": "^3.0.1",
     "passport": "^0.4.0",
